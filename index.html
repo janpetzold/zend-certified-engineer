@@ -1,0 +1,3943 @@
+<html>
+<head>
+	<title>Lernsammlung PHP</title>
+	<meta name="author" content="Jan Petzold" />
+</head>
+<body>
+<h1>Lernsammlung PHP</h1>
+<h3>Jan Petzold</h3>
+<h3>11.12.2011</h3>
+<h2>
+	PHP BASICS
+</h2>
+<ul>
+<li>PHP-Code kann mit &lt;?, &lt;%, &lt;script language=“php“&gt; oder auch &lt;?= starten (und enden), aber nicht mit &lt;! oder &lt;&amp;</li>
+<li>
+	Short Tags, Script und % sind deprecated
+</li>
+<li>
+	Variablennamen dürfen nie mit Zahl und sollten mit Kleinbuchstaben beginnen
+</li>
+<li>
+	Variablen dürfen andere Variablen referenzieren ($$test), Variablen können dann nach der Belegung auch mit dem Wert aufgerufen werden:
+	<pre>
+	$a = 'Hallo';
+	$$a = 'Welt';
+	echo $Hallo; // funktioniert, gibt „Welt“ aus
+	</pre>
+</li>
+<li>
+	Variable $$a kann auch über ${$a} ausgegeben werden
+</li>
+<li>
+	In PHP4 werden Variablen durch das Schlüsselwort var konstant
+</li>
+<li>
+	Nur in PHP4 können Variablenwerte gesetzt werden, ohne dass es die Variable gibt
+</li>
+<li>
+	Konstanten ohne $ oder über Funktion constant("Name") ausgeben
+</li>
+<li>
+	Wandlung einer Variablen über vorangestellten Typ, also z.B. (int)$myString oder über settype($myString, "int")
+</li>
+<li>
+	Variablen ausgeben über:
+</li>
+<ul>
+<li>
+	var_dump gibt Wert+Datentyp aus, kann auch mehrere Variablen ausgeben
+</li>
+<li>
+	var_export gibt PHP-Code zurück
+</li>
+<li>
+	print_r gibt Wert aus, kann Wert auch zurückgeben: $x=print_r($bla, true)
+</li>
+<li>
+	echo gibt einfach nur aus
+</li>
+</ul>
+<li>
+	Wenn Variable nicht definiert, aber abgefragt/ausgegeben wird: NULL &amp; E_NOTICE
+</li>
+<li>
+	Kurzform für Berechnung: $a += 1; steht für $a = $a + 1;
+</li>
+<li>
+	Modulus = Rest der Teilung, also 7 % 2 = 1
+</li>
+<li>
+	Exponentialfunktion: pow(base, exponent)
+</li>
+<li>
+	Bits verschieben 4 &gt;&gt; 2 = 1 (jedes &gt; entspricht Division / 2, &lt; Multiplikation * 2)
+</li>
+<li>
+	Reihenfolge der Operatoren sehr wichtig (z.B. Punkt vor Strich):
+	<pre>
+	$a = 3 * 3 % 5; // (3 * 3) % 5 = 4
+	$a = true ? 0 : true ? 1 : 2; // (true ? 0 : true) ? 1 : 2 = 2
+	$a = 1;
+	$b = 2;
+	$a = $b += 3; // $a = ($b += 3) -&gt; $a = 5, $b = 5
+	// mixing ++ and + produces undefined behavior
+	$a = 1;
+	echo ++$a + $a++; // may print 4 or 5
+	// conversion float/integer is not reliable
+	echo (int) ((0.1+0.7) * 10) //Ergebnis: 7, weil Ergebnis intern 7,999
+	</pre>
+</li>
+<li>
+	Bits umkehren mit Tilde ~1 = 0
+</li>
+<li>
+	Vergleich: != gleichbedeutend mit &lt;&gt;
+</li>
+<li>
+	Logischer Operator ! reagiert, auf alles, was nicht true ist &gt; 0, false, null
+</li>
+<li>
+	Bei Vergleichen von Strings ('apple' &gt; 'Apple' ergibt true) zählen ASCII-Werte
+</li>
+<li>
+	XOR-Operator $a^$b: jeder Operand könnte true sein, aber nicht beide
+</li>
+<li>
+	Operator . zum Zusammenfügen vorrangig vor mathematischen Operatoren
+</li>
+<li>
+	Erhöhung ++$a vor der Variable führt dazu, dass diese zuerst hochgezählt und dann ausgegeben wird, $a++ gibt erst aus und erhöht dann
+</li>
+<li>
+	Ternary Operator: Variable = (Bedingung) true:false, schneller als Basis-Abfragen!
+</li>
+<li>
+	$myage = ($age &lt; 16) 'child' : 'adult';
+</li>
+<li>
+	gute Form von Kontrollstrukturen, wenn PHP mit HTML gemischt wird:
+	<pre>
+	&lt;?php if ($a == 5): ?&gt;
+	A ist gleich 5
+	&lt;?php endif; ?&gt;
+	While:
+	$i = 1;
+	while ($i &lt;= 10) {
+		echo $i++; /* der ausgegebene Wert ist $i bevor er erhöht wird */
+	}
+	Do-While:
+	$i = 0;
+	do {
+		echo $i;
+	} while ($i &gt; 0);
+	do-while läuft immer mindestens einmal durch, while-Schleifen sind dagegen kopfgesteuert und fragen erst die Bedingung ab
+	switch wie mehrere ifs auf dieselbe Aufrage
+	switch ($i) {
+	case 0:
+		echo "i equals 0";
+		break;
+	case 1:
+		echo "i equals 1";
+		break;
+	}
+	</pre>
+</li>
+<li>
+	Continue bricht laufende Schleife ab und beginnt den nächsten Durchlauf:
+	<pre>
+	$arr = array(1, 2, 3);
+	foreach($arr as $number) {
+		if($number == 2) {
+			continue;
+		}
+		print $number; /* Ausgabe: 13 */
+	}
+	</pre>
+	break-Anweisung beendet dagegen den Loop ganz, kann auch Zahl x übergeben bekommen – für den Ausstieg aus Nested Loops über x Ebenen
+</li>
+<li>
+	Zusammenfassung Kontrollstrukturen: Bedingungen, Schleifen und alles, was diese beeinflußt (also auch break, continue, declare, return, require, include)
+</li>
+<li>
+	eval(Code) führt übergebenen String als PHP-Code aus (bad practice)
+</li>
+<li>
+	Verzögerungen in PHP4 über sleep(), usleep() und set_time_limit()
+</li>
+<li>
+	include und require identisch, aber im Fehlerfall löst require einen fatal error aus, include nur ein Warning
+</li>
+<li>
+	Um aus Sicherheitsgründen zu verhindern, dass includes Text ausgeben kann das schließende ?&gt;-Tag weggelassen werden (Parser läßt das zu)
+</li>
+<li>
+	In PHP 4.0.0 funktioniert require() nie mit externen Dateien, weiterhin wird die Datei immer gelesen, auch wenn nichts daraus verwendet wird
+</li>
+<li>
+	empty() überprüft ob eine Variable keinen Wert hat, isset() ob sie einen hat
+</li>
+<li>
+	Achtung: isset() gibt bei Variablenwert NULL false aus – nicht korrekt!
+</li>
+<li>
+	unset() löscht eine Variable, setzt sie also auf NULL
+</li>
+<li>
+	PHP bringt eine Reihe vordefinierter Variablen mit, die immer zur Verfügung stehen:
+</li>
+<ul>
+<li>
+	$GLOBALS — Referenziert alle Variablen, die im globalen Gültigkeitsbereich vorhanden sind
+</li>
+<li>
+	$_SERVER — Informationen über Server &amp; Umgebung, auch Kommandozeilen-argumente (argc: Anzahl der Argumente, argv: Array der Argumente)
+</li>
+<li>
+	$_GET — HTTP GET-Variablen, $_POST — HTTP POST-Variablen
+</li>
+<li>
+	$_FILES — HTTP Dateiupload-Variablen
+</li>
+<li>
+	$_REQUEST — HTTP Request-Variablen, keine Kommandozeilen-Argumente
+</li>
+<li>
+	$_SESSION — Sessionvariablen
+</li>
+<li>
+	$_ENV — Umgebungsvariablen
+</li>
+<li>
+	$_COOKIE — HTTP Cookies
+</li>
+<li>
+	$php_errormsg — Die vorangegangene Fehlermeldung
+</li>
+<li>
+	$HTTP_RAW_POST_DATA — Raw POST-Daten
+</li>
+<li>
+	$http_response_header — HTTP Response-Header
+</li>
+</ul>
+<li>
+	Globale Variablen können auch über 'global' definiert werden, dazu muß die Variable aber an die Funktion übergeben werden
+</li>
+<li>
+	Sieben "Magische Konstanten" starten und enden mit zwei Unterstrichen:
+</li>
+<ul>
+<li>
+	__CLASS__ Name der Klasse
+</li>
+<li>
+	__FUNCTION__ Name der Funktion
+</li>
+<li>
+	__METHOD__ Name der Klassenmethode
+</li>
+<li>
+	__DIR__ Verzeichnis der Datei
+</li>
+<li>
+	__FILE__ Pfad &amp; Dateiname
+</li>
+<li>
+	__LINE__ Zeilennummer der Datei
+</li>
+<li>
+	__NAMESPACE__ der aktuelle Namespace
+</li>
+</ul>
+<li>
+	PHP_EOL steht betriebssystemübergreifend für das Zeilenende
+</li>
+<li>
+	Namespaces gruppieren zusammenhängende Klassen, Funktionen und Konstanten, ähnlich wie Verzeichnisse auf einem Computer – Vorteile:
+</li>
+<li>
+	Klassennamen werden in Großprojekten mehrfach verwendet, Namens-kollisionen zwischen eigenem Code und Fremdcode – Lösung: Namespaces
+	<pre>
+	&lt;?php
+		namespace Foo\Bar\MyNamespace;
+		const FOO = 1;
+		function foo() {}
+		class foo {
+			static function staticmethod() {}
+		}
+		// Verwendung
+		Foo\Bar\MyNamespace\foo();
+	?&gt;
+	</pre>
+</li>
+<li>
+	Namespace beginnt mit „\“ &gt; absolute, ohne „\“ &gt; relativer Pfad
+</li>
+<li>
+	Best practice: Nur einen Namespace pro Datei definieren
+</li>
+<li>
+	zum globales N. gehören Funktionen, Klassen, Interfaces, Konstanten und Variablen
+</li>
+<li>
+	Extensions werden über php.ini aktiviert, Repository PECL
+</li>
+<li>
+	Funktionen haben per Konvention Unterstriche zwischen Wörtern, Klassen camelCase
+</li>
+<li>
+	PHP-Äquivalent zu .htaccess: user.ini, Auslese-Intervall kontrolliert die user.cache_ttl
+</li>
+<li>
+	Zusätzlich zur php.ini sucht PHP auch nach INI-Dateien in Verzeichnissen, die oberhalb des Verzeichnisses der gerade angeforderten PHP-Datei liegen (max.
+	bis DocRoot)
+</li>
+<li>
+	Performance-Beeinträchtigungen in PHP vor allem durch verringerte Speichernutzung und Laufzeitverzögerungen
+</li>
+<li>
+	Garbage Collection kann manuell ausgelöst werden: GC_COLLECT_CYCLE(), dies verringert aber die Performance
+</li>
+<li>
+	Neue Garbage Collection in PHP 5.3 verringert Speicherbedarf (Beispiel – Endlosschleife müllte früher das RAM zu, passiert jetzt nicht mehr) und
+	verhindert Slowdowns (Große Berechnungen dauern evtl. länger, benötigen aber in der Spitze viel weniger RAM, so dass mehr Luft für andere Anwendungen
+	bleibt)
+</li>
+<li>
+	für Fehler kann Funktion an set_error_handler() übergeben werden, die bei JEDEM Fehler aufgerufen wird seit PHP5 auch via Parameter in Fehlertypen
+	unterteilt
+</li>
+<li>
+	Evtl. Unterschiede zwischen 32 und 64bit-Systemen – 64bit unterstützt wesentlich längere Integer-Werte
+</li>
+<li>
+	Übersicht aller geladenen Extensions über phpinfo() und get_loaded_extensions()
+</li>
+<li>
+	den Befehl boolean() zur Abfrage nach einer Boolean-Variable gibt es nicht
+</li>
+<li>
+	opcode: PHP-Code wird vor der Ausführung zunächst in 'intermediate' Code geparsed – die Ausgabe des Parsers kann gecached werden und beim nächsten Aufruf
+	des Skripts direkt an Interpreter übergeben werden (evtl. ab PHP 5.4 APC standardmäßig dabei)
+</li>
+<li>
+	generell ist RAM sehr wichtig, weiterhin sollten nicht zu viele Apache-Prozesse parallel laufen
+</li>
+<li>
+	Wichtigste ini-Direktiven der php.ini:
+</li>
+<ul>
+<li>
+	short_open_tag: erlaubt Kurzform des PHP-Tags &lt;??&gt;
+</li>
+<li>
+	expose_php: Bestimmt, ob PHP im Header ausgegeben wird
+</li>
+<li>
+	disable_functions, disable_classes: PHP-interne Funktionen &amp; Klassen, die deaktiviert werden sollen
+</li>
+<li>
+	memory_limit: Maximaler RAM-Bedarf eines Skripts, wird bei Uploads schnell überschritten (unbegrenzt über Wert -1)
+</li>
+<li>
+	max_execution_time (Standard: 30 Sekunden) regelt Ausführungszeit des Skripts, gilt nicht für Systemaufrufe, sleep() oder DB-Funktionen
+</li>
+<li>
+	max_input_time (Standard: 60 Sekunden) regelt Zeit zwischen Empfang der Daten und Ausführung des Skripts wird auch bei Uploads schnell überschritten
+</li>
+<li>
+	request_order: Bestimmt Anordnung der GET, POST und COOKIE-Variablen im $_REQUEST-Array
+</li>
+<li>
+	register_globals: Alle Umgebungsvariablen werden global, seit 4.2 deaktiviert
+</li>
+<li>
+	post_max_size: Maximale Größe von POST-Dateien
+</li>
+<li>
+	include_path: Liste von Verzeichnissen für include() und require()
+</li>
+<li>
+	doc_root: Stammverzeichnis der PHP-Skripte, bei aktiviertem Safe Mode werden alle Dateien außerhalb des Verzeichnisses ignoriert (Alternative:
+	Umgebungsvariable PHP_DOCUMENT_ROOT)
+</li>
+<li>
+	open_basedir: Begrenzt lesbare Datei auf ein Ausgangs-Verzeichnis, kann auch über Apache-Konfig gesetzt werden
+</li>
+<li>
+	user_dir: Verzeichnis der Nutzerdaten, Dateien darunter werden ausgeführt
+</li>
+<li>
+	cgi.force_redirect: verhindert Direktaufruf eines Skripts (z.B. <a href="http://host/cgi-bin/secret/script.php">http://host/cgi-bin/secret/script.php</a>
+	), überprüft korrekten Redirect des Webservers
+</li>
+<li>
+	cgi.force_redirect wichtig bei PHP als CGI-Modul, da nur Berechtigung zum Zugriff auf das CGI-Modul überprüft wird und nicht auf die Datei selbst
+</li>
+<li>
+	extension_dir: Verzeichnis der Extensions
+</li>
+<li>
+	file_uploads: Erlaubt oder verbietet Datei-Uploads
+</li>
+<li>
+	upload_tmp_dir: Temporäres Verzeichnis für Uploads
+</li>
+<li>
+	upload_max_filesize: Maximale Dateigröße einer hochgeladenen Datei
+</li>
+<li>
+	max_file_uploads: Parallele Uploads pro Request (Default: 20)
+</li>
+</ul>
+</ul>
+
+
+
+<h2>
+	SECURITY
+</h2>
+
+
+
+<ul>
+<li>
+	Beste Settings für Produktivumgebung: register_globals off, display_errors off, log_errors on, allow_url_include off, error_reporting = E_ALL &amp;
+	~E_DEPRECATED
+</li>
+<li>
+	Fehlertyp E_PARSE tritt beim Parsen auf, E_ERROR weist auf Speicherprobleme hin – beide Fehlertypen können nicht per Handler abgefangen werden
+</li>
+<li>
+	E_STRICT muß in php.ini aktiviert werden, nicht in E_ALL enthalten (seit 5.4 schon)
+</li>
+<li>
+	E_DEPRECATED bei Code, der in späteren Versionen nicht mehr funktionieren wird
+</li>
+<li>
+	Eigene Fehler können über trigger_error() und das Alias user_error() erstellt werden
+</li>
+<li>
+	debug_backtrace() gibt Fehler nach der Ausführung eines Befehls (Funktion, Zeilennummer, Klasse, Typ des Aufrufs, …) in einem Array aus
+</li>
+<li>
+	error_log() sendet Fehlermeldung an Logfile des Webservers oder per Mail
+</li>
+<li>
+	register_globals: setzt alle möglichen übergebenen Variablen global, wie z.B. GET und POST-Variablen aus Formularen – hohes Sicherheitsrisiko
+</li>
+<li>
+	wenn register_globals aktiviert sein muß &gt; alle Variablen vor der Nutzung initialisieren, sämtliche Fremddaten filtern
+</li>
+<li>
+	Aufruf der Kommandozeile (exec(), system(), passthru()) sollte deaktiviert werden
+</li>
+<li>
+	HTTPS verschlüsselt sowohl URLs als auch Parameter in der Übertragung
+</li>
+<li>
+	Errors niemals in Produktivumgebung anzeigen, aber immer loggen
+</li>
+<li>
+	Fehlerbehandlung kann auch zur Laufzeit gesetzt werden: error_reporting(0) schaltet alles ab, error_reporting(6143) steht für E-ALL
+</li>
+<li>
+	error_reporting(0) kann aber natürlich keine Parsing-Fehler abschalten
+</li>
+<li>
+	Bei Verwendung als CGI-Modul kann PHP-Parser auch außerhalb des DocRoot liegen, z.B. in /usr/local/bin – dann muß aber jedes Skript mit
+	#!/usr/local/bin/php beginnen
+</li>
+<li>
+	Risiko beim Apache: xbithack in php.ini – dann werden alle Skripte mit Ausführbit vom PHP-Parser verarbeitet
+</li>
+<li>
+	Funktion chroot() wechselt ins Root-Verzeichnis – unter Windows nicht möglich, weiterhin muß PHP als CLI, CGI oder Embed S(erver)API genutzt werden,
+	benötigt außerdem Root-Rechte
+</li>
+<li>
+	ausführbare Dateien in separatem Verzeichnis ablegen
+</li>
+<li>
+	alle vom Nutzer gesetzten Variablen müssen überprüft und validiert werden &gt; womöglich wichtigste PHP-Sicherheitsregel
+</li>
+<li>
+	auch $_SERVER enthält clientseitige Variablen (z.B. Referrer)
+</li>
+<li>
+	Eingabefelder sollten um ein Token ergänzt werden, dass in der Session gespeichert ist
+</li>
+<li>
+	PHP hat eingebautes Filtermodul um Werte zu validieren (FILTER_VALIDATE_*) und auf Zulässigkeit zu prüfen (FILTER_SANITIZE_*) – Beispiel: E-Mail-Adresse,
+	URL, Zahlen, ...
+	<pre>
+	$new_string = filter_var($string, FILTER_SANITIZE_STRING);
+	</pre>
+</li>
+<li>
+	Zahlenwerte mit is_numeric() bzw. ctype_digit(Zahlenwert) überprüfen, alternativ Zahlenausgabe mit sprintf() erzwingen oder mit settype(Variable, Type)
+	festlegen
+</li>
+<li>
+	PHP Web-User darf nur eingeschränkte Rechte haben (Apache-User != Root)
+</li>
+<li>
+	Problem Nullbytes \0: markieren immer das Ende eines Strings, können ausgenutzt werden &gt; Überprüfung notwendig
+</li>
+<li>
+	Session-ID ist zufällig, nicht abhängig vom Client (keine IP, CPU, User-Agent oder Hash)
+</li>
+<li>
+	Sessions werden im /temp-Verzeichnis mit sess_ID gespeichert, sind also für andere Nutzer des Servers (shared hosting) lesbar
+</li>
+<li>
+	Sessions bleiben auch nach Neustart des Servers erhalten
+</li>
+<li>
+	Es gibt keine maximale Datengröße für Sessions
+</li>
+<li>
+	Sessions können keine Ressourcen oder Objekte mit Ringreferenzen (Objekte mit Referenz auf sich selbst) speichern
+</li>
+<li>
+	Sessions absichern: ID neu generieren über session_regenerate_id, sonst Gefahr des „Session Riding“: http://evil.org/index.php?PHPSESSID=1234
+</li>
+<li>
+	weiterhin ID nach dem Login aber vor der Authentifizierung generieren, kurze Timeouts, SSL oder IP-Addressüberprüfung
+</li>
+<ul>
+<li>
+	session.use_only_cookies: spezifiziert, ob das Modul nur Cookies verwendet, um die Session-ID clientseitig zu speichern. Mit Aktivierung dieser
+	Einstellung wird möglichen Angriffen durch Übermittlung von Session-IDs in URLs vorgebeugt. Diese Einstellung wurde in PHP 4.3.0 hinzugefügt. Ab PHP 5.3.0
+	ist die Grundeinstellung 1 (aktiviert).
+</li>
+<li>
+	session.cookie_httponly: markiert das Cookie als nur über das HTTP-Protokoll zugänglich. Das bedeutet, dass für Skriptsprachen wie z.B. JavaScript nicht
+	zugänglich ist. Diese Einstellung kann helfen, Identitätsdiebstahl durch XSS-Angriffe zu reduzieren (obwohl es nicht von allen Browsern unterstützt wird).
+</li>
+<li>
+	session_set_cookie_params: Setzt die Session-Cookie Parameter
+	<pre>
+	void session_set_cookie_params ( int $lifetime [, string $path [, string $domain [, bool $secure = false [, bool $httponly = false ]]]] )
+	</pre>
+</li>
+<li>Setzen der Cookie-Parameter laut php.ini wirkt sich nur für die Dauer des Scripts aus, muß noch vor session_start() aufgerufen werden, erschwert auch das
+	Auslesen von Cookies via Javascript
+</li>
+</ul>
+<li>
+	Session können über session_unset() und session_destroy() geleert werden
+</li>
+<li>
+	gegen Cross-Site-Scripting (XSS, Einschleusen von Skript-Code): Alle Daten escapen
+</li>
+<li>
+	XSS kann keinen serverseitigen Code einschleusen, ebenso sind CSS-Anweisungen ungefährlich
+</li>
+<li>
+	Mögliche Risiken sind Phishing, Umleitung auf Fremdserver, umgehen von Validitätsprüfungen, Auslesen von Cookies
+</li>
+<li>
+	strip_tags(String, AllowedTags) entfernt HTMLund PHP-Tags aus einem String
+</li>
+<li>
+	Cross-Site Request forgeries (CSRF) senden einen “fremdgesteuerten” Request an eine Website, dabei sieht es im Log so aus, als hätte der Nutzer den
+	Request selbst gemacht
+</li>
+<li>
+	CSRF werden meist über iframes oder AJAX ausgelöst, geht aber auch über &lt;img&gt;, &lt;script&gt;, &lt;object&gt;, &lt;embed&gt;, …
+</li>
+<li>
+	„Session Riding“ (CSRF-Art) manipuliert Daten mit einer einmal erhaltenen Session-ID
+</li>
+<li>
+	zu vermeiden über Abfrage des User Agents nach Beginn der Session, wird bei jedem folgenden Schritt wieder kontrolliert &gt; bei Änderung: neuer Login
+</li>
+<li>
+	Ansonsten über erneutes Login und individuelles Token für jedes Formular:
+	<pre>
+	// Formular
+	session_start();
+	$token = md5(uniqid(rand(), TRUE));
+	$_SESSION[’token’] = $token;
+	
+	// Verarbeitung
+	if (isset($_SESSION[’token’]) &amp;&amp; isset($_POST[’token’]) &amp;&amp; $_POST[’token’] == $_SESSION[’token’]) {
+		// Token is valid, continue processing form data
+	}
+	</pre>
+</li>
+<li>
+	Faustregel: Jeden Input filtern bzw.validieren, Output escapen, niemals auf Javascript zur Prüfung verlassen
+</li>
+<li>
+	Output escapen wg. XSS und SQL-Injection
+</li>
+<li>
+	SQL-Injection am besten über Prepared Statements vermeiden
+</li>
+<li>
+	addslashes() bietet nur unzureichenden Schutz
+</li>
+<li>
+	Remote Code Injection: Daten mit Whitelist vgl., Pfade über basename() entfernen
+</li>
+<li>
+	$path = "/home/httpd/html/index.php";
+</li>
+<li>
+	$file = basename($path); // $file enthält den Wert "index.php"
+</li>
+<li>
+	$file = basename ($path,".php"); // $file enthält den Wert "index"
+</li>
+<li>
+	Shell-Aufrufe immer mit escapeshellargs / escapeshellcmd escapen, system() so wenig wie möglich einsetzen
+</li>
+<li>
+	Mail-Header müssen überprüft werden, z.B. bei Nutzerangaben (falscher Absender)
+</li>
+<li>
+	Bei Mails den SMTP-Port nur dann öffnen, wenn es nötig ist
+</li>
+<li>
+	SMTP Tarpits &gt; Erhöhung des Antwort-Intervalls nach jeder Mail-Zeile, Server wird quasi künstlich verlangsamt
+</li>
+<li>
+	Einheitliches Character Set verwenden, Angreifer könnten dies ausnutzen und über einen nicht-standardkonformen Zeichensatz Befehle einschleusen
+</li>
+<li>
+	Magic Quotes: deprecated, aber wenn aktiviert escapen sie alle ', '', \ und NULL-zeichen automatisch (identisch mit addslashes())
+</li>
+<li>
+	magic_quotes_gpc kann nur in php.ini und nicht zur Laufzeit deaktiviert werden
+</li>
+<li>
+	expose_php auf 'off' in php.ini versteckt PHP &gt; es wird nicht ausgegeben, dass PHP auf dem Server installiert ist
+</li>
+<li>
+	HTTP-Authentifizierung über header möglich:
+	<pre>
+	header('WWW-Authenticate: Basic realm=“Hallo“');
+	</pre>
+</li>
+<li>
+	Richtige Schreibweise enorm wichtig! Realm in doppelte Anführungszeichen!
+</li>
+<li>
+	PHP überprüft automatisch auf eine AuthType-Direktive bei gesetzter Variable $_SERVER['PHP_AUTH_TYPE']
+</li>
+<li>
+	Passwörter als Hash (MD5, SHA1) speichern
+</li>
+<li>
+	Zugangsberechtigungen in Konstanten statt Variablen speichern
+</li>
+<li>
+	Sha1-Verschlüsselung standardmäßig 40 Zeichen, bei Parameter raw_output nur 20
+</li>
+<li>
+	bei Uploads: MIME-Type ignorieren, selbständig überprüfen, basename() sowie is_uploaded_file() {checkt, ob eine Datei via POST übertragen wurde}
+	einsetzen
+</li>
+<li>
+	move_uploaded_file() überprüft hochgeladene Datei und schiebt sie an einen Zielort
+</li>
+<li>
+	Informationen über eine hochgeladene Datei z.B. so: $_FILES['uploadFormfeld']['size'];
+</li>
+<li>
+	Neben size stehen auch noch name, type, tmp_name und error zur Verfügung
+</li>
+<li>
+	input-Parameter MAX_FILE_SIZE (Standard: 2 MB) ist Hinweis für Browser, kann umgangen werden, ist für Nutzer hilfreich (kein Abbruch kurz vor Ende des
+	Uploads)
+</li>
+<li>
+	Zugangsdaten am besten außerhalb des DocRoot, wenn aber auf mehreren Servern ausgerollt werden soll am besten in .php-Datei im DocRoot
+</li>
+<li>
+	Daten können auch über mcrypt und mhash verschlüsselt werden (für DB)
+</li>
+<li>
+	entfernte Dateien könne über allow_url_fopen() gelesen/geschrieben werden, funktioniert mit allen URL-Wrappern(z.B. FTP), Sicherheitsrisiko
+</li>
+<li>
+	PHP Safe Mode seit 5.3 veraltet, überprüft meistens, ob der Eigentümer der zu bearbeitenden Ressource identisch mit dem ausführenden Benutzer ist
+</li>
+
+
+
+<h2>
+	WEB FEATURES
+</h2>
+
+
+<li>
+	GZip-Kompression kann auch in php.ini aktiviert werden:
+	<pre>
+	zlib.output_compression = on
+	zlib.output_compression_level = 9
+	</pre>
+</li>
+<li>
+	Sessions speichern Daten über verschiedene Aktionen/Seitenwechsel hinaus
+</li>
+<li>
+	verringert den Aufwand bei der Entwicklung von Web-Anwendungen, kann Daten sicher übertragen
+</li>
+<li>
+	Sessiondaten werden in URL oder als Cookie gesichert
+</li>
+<li>
+	ab PHP5 kann session.use_trans_sid „transparente“ Session-IDs verwenden – URL-basiert, Sicherheitsrisiko, aber URLs können weitergeleitet werden
+</li>
+<li>
+	Session-Variablen werden nicht in globalen Variablen gespeichert (es sei denn, register_globals ist aktiviert)
+</li>
+<li>
+	aus Sicherheitsgründen nach session_start() immer session_regenerate_id()
+</li>
+<li>
+	session_cache_expire: liefert und setzt Cache-Verfallszeit , Standard 180 Minuten, wird auch über INI-Direktive session.gc_maxlifetime konfiguriert
+</li>
+<li>
+	session.gc_maxlifetime bezieht sich nicht auf die Erstellung sondern die letzte Schreiboperation einer Session!
+</li>
+<li>
+	Sessions können über session.auto_start() automatisch gestartet werden, dann lassen sich aber keine Objekte in einer Session speichern – dafür müßte die
+	Klasse vor der Session geladen werden, das ist dann nicht möglich
+</li>
+<li>
+	Session wird normalerweise nach dem Ende des Skripts automatisch beendet, manuelles Beenden über session_write_close() oder session_commit() &gt; Alias
+</li>
+<li>
+	Komplettes Löschen einer Session:
+	<pre>
+	$_SESSION = array();
+	setcookie(session_name(), '', time()-42000, '/');
+	session_destroy();
+	</pre>
+</li>
+<li>
+	Sessions können in PHP5 auch über die neuen Konfigurationseinstellungen session.hash_function (Verschlüsselung, '0' bedeutet MD5 128 Bit und '1' bedeutet
+	SHA-1 160 Bit) und session.hash_bits_per_character (regelt die möglichen Zeichen einer Session, bei Einstellung „4“ sind das a-z und 0-9, bei „6“ auch
+	Großbuchstaben) konfiguriert werden
+</li>
+<li>
+	in Formularen: Punkte und Leerzeichen werden zu Unterstrichen konvertiert
+</li>
+<li>
+	`name.x` wird $_POST["name_x"]
+</li>
+<li>
+	Formulardateien können als Array gespeichert werden über
+	<pre>
+	&lt;input name="FormArray[]" /&gt;
+	</pre>
+</li>
+<li>
+	Für Felder ist das genauso möglich:
+	<pre>
+	&lt;input type='text' name='myinput[]' value='eins' /&gt;
+	&lt;input type='text' name='myinput[]' value='zwei' /&gt;
+	&lt;input type='text' name='myinput[]' value='drei' /&gt;
+	
+	// PHP
+	print_r($_GET['myinput']); // Array([0] =&gt; 'eins' [1] =&gt; 'zwei', …);
+	import_request_variables(types, variables) — Import GET/POST/Cookie variables into the global scope
+
+	// This will import GET and POST vars with an "rvar_" prefix
+	import_request_variables("gp", "rvar_");
+	echo $rvar_foo;
+	</pre>
+</li>
+<li>
+	Types sind g (GET),p (POST) und c (Cookie)
+</li>
+<li>
+	Urlencode: Die Funktion ist geeignet, wenn ein String innerhalb eines Queryparts eines URL verwendet werden soll, und man einen komfortablen Weg
+	benötigt, Variablen an die nächste Seite zu übergeben.
+	<pre>
+	echo '&lt;a href="mycgi?foo=', urlencode($userinput), '"&gt;';
+	</pre>
+</li>
+<li>
+	Uploads funktionieren via POST-Request, mehrere Uploads über mehrere Input-Felder
+</li>
+<li>
+	Input-Feld kann über maxlength die Dateigröße angeben, das wird aber von den Browsern ignoriert, dasselbe gilt für accept='MIME-Type'
+</li>
+<li>
+	beim Input type='image' werden Xund Y-Koordinaten des Bildes übertragen
+</li>
+<li>
+	Uploads muß das Formular das Attribut enctype="multipart/form-data" enthalten, weiterhin muß ein Input-Feld mit dem Typ 'file' existieren
+</li>
+<li>
+	Um bei Zurück-Button nach abgeschicktem Formular die Meldun „Wollen Sie das Formular nochmal senden...“ zu vermeiden einfach via header() auf die
+	Ergebnisseite weiterleiten
+</li>
+<li>
+	Cookies müssen über setcookie() gesetzt werden bevor Ausgabe im Browser erfolgt
+	<pre>
+	bool setcookie ( string $name [, string $value [, int $expire = 0 [, string $path [, string $domain [, bool $secure = false [, bool $httponly = false
+	]]]]]] )
+	</pre>
+</li>
+<li>
+	setcookie() setzt Cookie mit Header-Informationen, muß vor jeglicher Ausgabe aufgerufen werden
+</li>
+<li>
+	Cookies stehen in $_REQUEST, $_COOKIE und $HTTP_COOKIE_VARS
+</li>
+<li>
+	setcookie() encodiert alle Werte (urlencode), setrawcookie() tut das nicht
+</li>
+<li>
+	Cookie-Support kann ohne Javascript über zwei Requests ermittelt werden (setcookie/getcookie)
+</li>
+<li>
+	Cookies können auch als Array gesetzt werden:
+	<pre>
+	setcookie(“Test[wert]“, '123');
+	</pre>
+</li>
+<li>
+	Auslesen von Cookies über $_COOKIE['wert'], bei Array $_COOKIE['Test']['wert']
+</li>
+<li>
+	höhere Werte in einem Cookie über Serialisierung des Arrays oder explode
+</li>
+<li>
+	headers_list() gibt ein Array der Header zurück, die zum Browser/Client gesendet werden. Um festzustellen, ob diese Header bereits gesendet worden sind,
+	verwenden Sie headers_sent(). Headers_remove() entfernt header, die bereits festgelegt wurden.
+</li>
+<li>
+	Header können über isSuccessful und isError überprüft werden
+</li>
+<li>
+	header kann auch weiterleiten:
+	<pre>
+	header('<a href="http://www.neuedomain.com/">http://www.neuedomain.com</a>');
+	exit();
+	</pre>
+</li>
+<li>
+	Caching kann beeinflußt werden:
+	<pre>
+	header('Cache-Control: no-cache, must-revalidate');
+	header('Expires: Sat, 26 Jul 1997 05:00:00 GMT')
+	</pre>
+</li>
+<li>
+	Authentifizierungs-Dialog auch über header() möglich, möglich sind Basis-Authentifizierung (keine Verschlüsselung des Paßworts) sowie Digest
+	(verschlüsselt)
+</li>
+<li>
+	Mailadressen können Leerzeichen enthalten (werden von MTA rausgefiltert), aber keine Sonderzeichen oder Zeilenumbrüche
+</li>
+<li>
+	Auf Linux wird sendmail für PHP-Mail benötigt, bei Windows/Novell gilt das nicht
+</li>
+<li>
+	Wenn Windows/Novell oder sendmail vorhanden können auch additional_headers gesendet werden
+</li>
+<li>
+	Mails können mehrere MIME-Abschnitte enthalten, werden über Boundaries (--Beginn, --Ende--) vom Rest der Nachricht abgetrennt
+</li>
+<li>
+	MIME E-Mails über die Definition von Content-Type, MIME-Version und Content-Transfer-Encoding
+</li>
+<li>
+	MIME-Blöcke können auch ineinander verschachtelt werden
+</li>
+<li>
+	Bei Mails mit mehreren Inhalten (Bild, HTML, …) den Content-Type multipart/alternative verwenden, dabei am besten den plain text voranstellen
+</li>
+<li>
+	ip2long() wandelt IP in Langschreibweise um, long2ip() kehrt um:
+	<pre>
+	$long = ip2long(gethostbyname('www.example.com'));
+	echo $long . "\n"; // -107373295
+	</pre>
+</li>
+<li>
+	gethostbyname(Host) gibt IP-Adresse des Hosts zurück, gethostbynamel(Host) ein Array mit allen gefundenen IP-Adressen
+</li>
+<li>
+	getservbyname(Service, Protocol) gibt Port aus, der zum Service des Protokolls gehört, Protocol kann „tcp“ oder „udp“ sein:
+	<pre>
+	$port = getservbyname('ftp', 'tcp');
+	</pre>
+</li>
+</ul>
+
+
+
+<h2>
+	FUNKTIONEN
+</h2>
+
+
+<ul>
+<li>
+	Benennung analog zu anderen Bezeichnern – beginnt mit Buchstabe oder _
+</li>
+<li>
+	Überprüfung, ob eine Funktion vorhanden ist: function_exists(), Array aller vorhandenen Funktionen über get_defined_functions()
+</li>
+<li>
+	magische Konstante __FUNCTION__ liefert in PHP4 den Funktionsnamen in Kleinschreibung, PHP5 berücksichtigt Klein-/Groß
+</li>
+<li>
+	Ausgabe aller Funktionen einer Extension: get_extension_funcs(Extension)
+</li>
+<li>
+	Bei Funktionen wird nicht zwischen Großund Kleinschreibung unterschieden (anders als bei Variablen), daher darf derselbe Funktionsname nicht mehrfach
+	in einem Skript auftreten (Fatal Error)
+</li>
+<li>
+	Funktionen immer direkt aufrufen oder über
+</li>
+<ul>
+<li>
+	call_user_func(Function, Param1, Param2, ...) (besonders für Callbacks)
+</li>
+<li>
+	call_user_func_array(Function, ParamArray)
+</li>
+<li>
+	$var = "myFunction"; $var();
+</li>
+</ul>
+<li>
+	Achtung: Direktaufrufe wie function(), func(), call_function() gibt es nicht!
+</li>
+<li>
+	create_function('Parameters', PHP-Code): für anonyme Funktionen, die zur Laufzeit erzeugt werden, Funktion wird anhand der übergebenen Parameter erzeugt
+	und gibt eindeutigen Namen zurück:
+	<pre>
+	$newfunc = create_function('$a,$b', 'return $a + $b;');
+	</pre>
+</li>
+<li>
+	Funktionen können mit return() auch Arrays und Objekte zurückgeben, aber nicht mehrere Variablen – Parse Error
+</li>
+<li>
+	Wenn einfach nur return; steht dann ist der Rückgabewert NULL
+</li>
+<li>
+	Wenn eine Funktion in einer Funktion definiert ist, so kann sie auch von außen aufgerufen werden – Voraussetzung: die übergeordnete Funktion wird vorher
+	aufgerufen – ist das nicht der Fall: Fatal Error
+</li>
+<li>
+	Überladen von Funktionen nicht möglich, einmal definierte Funktionen können nicht überschrieben oder gelöscht werden
+</li>
+<li>
+	func_num_args() &gt; Zahl der Argumente einer Funktion
+</li>
+<li>
+	func_get_arg(Offset) &gt; bestimmtes Argument, hat keinen Zugriff auf Vorgabewerte, Offset beginnt mit '0' (Zählung wie bei Array), bei Fehler: Warning
+</li>
+<li>
+	func_get_args() &gt; alle Argumente als Array, kein Zugriff auf Vorgabewerte
+</li>
+<li>
+	Wenn eine Variable z.B. $bla() mit () aufgerufen wird sucht PHP automatisch nach einer Funktion mit diesem Namen und führt sie aus
+</li>
+<li>
+	Funktionsargumente können auch mit &amp; übergeben werden = Referenz statt Kopie der Variable, Wert wird auch außerhalb der Funktion geändert
+	<pre>
+	function fuege_etwas_anderes_an(&amp;$string){
+		$string .= 'und nun zu etwas anderem.';
+	}
+	
+	$str = 'Dies ist ein String, ';
+	fuege_etwas_anderes_an ($str);
+	
+	echo $str; // Ausgabe: 'Dies ist ein String, und nun zu …'
+	</pre>
+</li>
+<li>
+	Referenz funktioniert für jeden Datentyp außer Objekt (ist immer eine Referenz, daher egal), aber nur für Variablen – keine (zu berechnenden) Ausdrücke
+</li>
+<li>
+	Referenz beim Aufruf geht auch, ist aber deprecated:
+	<pre>
+	fuege_etwas_anderes_an (&amp;$str); // '&amp;' nicht in function($string)!
+	</pre>
+</li>
+<li>
+	Funktioniert nicht für Werte eines Arrays, wenn Array als Referenz übergeben wird:
+	<pre>
+	$array = (1,2,3);
+	function doubleMe(&amp;$arr = null){ // PHP5 erlaubt Vorgaben
+		foreach($arr as $value) {
+			$e *= 2; // ändert Werte nur innerhalb der Funktion!
+		}
+	}
+	doubleMe($array);
+	</pre>
+</li>
+<li>
+	Wenn man einer als global deklarierten Variable eine Referenz innerhalb einer Funktion zuweist, wird die Referenz nur innerhalb der Funktion sichtbar
+	sein. Dies kann durch die Verwendung des $GLOBALS-Arrays vermieden werden.
+</li>
+<li>
+	Faustregel: Referenzübergabe minimal langsamer als direkte Übergabe der Parameter (lazy-copy-mechanism)
+</li>
+<li>
+	Um die Funktion selbst als Referenz zu übergeben muß &amp; im Funktionsbezeichner und beim Aufruf gesetzt werden:
+	<pre>
+	function &amp;returnfunction() {
+		return $bla;
+	}
+	$newreference = &amp;returnfunction();
+	</pre>
+</li>
+<li>
+	&amp;returnfunction() MUSS dann aber eine Variable als Rückgabewert haben, sonst:
+</li>
+<ul>
+<li>
+	Notice z.B. bei return 'hello' (also keine Variable)
+</li>
+<li>
+	Warning wenn gar kein return-Wert vorhanden
+</li>
+</ul>
+<li>
+	Referenzen können über unset($referenz) gelöscht werden (das betrifft nicht die übergebene Variable)
+</li>
+<li>
+	Man kann auch dieselbe Variable mehrfach übergeben, Sinn macht das aber nicht:
+	<pre>
+	function test($x, $x=1, $x=2) {
+		return $x; // ist 2
+	}
+	</pre>
+</li>
+<li>
+	Funktionen mit gesetztem Default-Parameter verhindern Warnings:
+</li>
+<li>
+	function test(bla="Standard") { ... }
+</li>
+<li>
+	Default-Parameter funktioniert nicht mit Referenzen
+</li>
+<li>
+	Vorgabewerte müssen rechts stehen, ansonsten: Warnung
+</li>
+<li>
+	Alle Parameter müssen übergeben werden, sonst Fatal Error (Missing Argument)
+</li>
+<li>
+	Closures (anonyme Funktionen) werden v.a. für Callbacks eingesetzt, um Zustand (Variable) zu speichern, der im Moment gilt und später nochmal benötigt
+	wird
+</li>
+<li>
+	Zur Konservierung der Variable dient das Schlüsselwort „use“:
+	<pre>
+	$status = 200;
+	
+	$closure = function($result) use ($status) {
+		return $result == $status;
+	}
+
+	$status = 300;
+	$closure(200); // true
+	$closure(300) // false
+
+	// ohne Speicherung einer Variable
+
+	$greet = function($name) {
+		printf("Hello %s\r\n", $name);
+	};
+	$greet('World');
+	$greet('PHP');
+	</pre>
+</li>
+<li>
+	Closures beziehen sich immer auf den Bereich in dem sie definiert wurden, also nicht zwangsläufig auf die Funktion von der sie aufgerufen wurden
+</li>
+<li>
+	Closures gibt es seit PHP 5.3, die Funktionen func_num_args(), func_get_arg() und func_get_args() funktionieren auch in einer Closure
+</li>
+<li>
+	Um herauszufinden, ob eine Variable $param eine anonyme Funktion (=Closure) einer Methode ist, kann is_callable(FunctionName, SyntaxOnly, CallableName)
+	verwendet werden (SyntaxOnly überprüft nur, ob Variable eine Funktion enthält)
+	
+	<pre>
+	function someFunction() {}
+	$funcVar = 'someFunction';
+	is_callable($funcVar, false, $callable_name); // true
+	</pre>
+</li>
+
+
+
+<h2>
+	OOP
+</h2>
+
+
+
+<li>
+	Gültiger Klassenname beginnt mit Buchstaben oder Unterstrich
+</li>
+<li>
+	Überprüfung, ob eine Klasse zur Verfügung steht mit get_declared_classes()
+</li>
+<li>
+	Überprüfung nach allen Methoden einer Klasse via get_class_methods()
+</li>
+<li>
+	Liste aller Konstanten über get_defined_constants()
+</li>
+<li>
+	Konstanten sind Variablen einer Klasse die sich nicht ändern, ähnlich define():
+	<pre>
+	class MyClass {
+		const constant = 'Konstanter Wert';
+		function showConstant() {
+			echo self::constant; // self:: liest statisches aus
+		}
+	}
+	
+	echo MyClass::constant . "\n"; // Ausgabe 'Konstanter Wert'
+	$classname = "MyClass";
+	echo $classname::constant . "\n"; // Ab PHP 5.3.0
+	$class = new MyClass();
+	$class-&gt;showConstant();
+	echo $class::constant; // Ab PHP 5.3.0
+	</pre>
+</li>
+<li>
+	Konstanten ändern ihren Wert nicht, statische Variablen sind dagegen ohne Instanz der Klasse zugänglich
+</li>
+<li>
+	Beim Vergleich zwischen Konstante + Wert die Konstante an erster Stelle platzieren
+</li>
+<li>
+	Eindeutige Kennung eines Objekts über spl_object_hash()
+</li>
+<li>
+	Abfrage auf ein leeres Objekt über empty() liefert nur bei PHP4 true
+</li>
+<li>
+	Wiederkehrende Problemlösungen in der OOP heißen Design Patterns/ Entwicklungsmuster:
+</li>
+<ul>
+<li>
+	ActiveRecord: Sehr einfach – Zugriff auf Datenquelle erfolgt nicht direkt, sondern über eine Klasse, die den Datenzugriff (z.B. auf DB) kapselt
+</li>
+<li>
+	Singleton: Limitiert Anzahl der Instanzen einer Klasse auf 1 (z.B. wenn es nur eine Verbindung geben darf), besser als globale Variablen oder ständige
+	neue Instanzen ohne wirklichen Nutzen, Konstruktor meist private
+</li>
+<li>
+	Registry: Fortführung von Singleton, Zugriff auf „globale“ Funktionen und Klassen aus verschiedenen Klassen, verwendet aber Getter und Setter für
+	Zugriff/Speicherung der Daten, sollte Validierungsmethode enthalten
+</li>
+<li>
+	Factory-Pattern: Kapselung von Instanzen, hat nur eine Get-Methode und instanziert Objekte zur Laufzeit (also erst bei Bedarf). Nützlich, wenn aus einer
+	„Factory“ verschiedene Klassen instanziert werden sollen, die ähnliche Aufgaben erfüllen oder die Instanzierung gekapselt werden soll
+</li>
+<li>
+	Model-View-Controller: Funktion wird von Eingabe/Ausgabe getrennt und zentral gesteuert (Model=Hirn, Controller=Motorik)
+</li>
+<li>
+	Observer: ein Objekt überwacht das andere, nachträgliche „Überwachungen“ ohne das Quell-Objekt zu verändern
+</li>
+</ul>
+<li>
+	Klassenname sollte beim dynamischen Laden überprüft werden (z.B. ../)
+</li>
+<li>
+	instanceof oder is_a() überprüfen, ob ein Objekt zu einer Klasse gehört – get_class() gibt den Klassennamen aus
+	<pre>
+	var_dump($a instanceof MyClass); // true or false
+	var_dump(is_a($a, 'MyClass')); // true or false
+	get_class($a); // MyClass
+	</pre>
+</li>
+<li>
+	is_a() überprüft unter PHP4, ob Variable eine Instanz einer Klasse ist (Type Hinting und instanceof() gibt es noch nicht)
+</li>
+<li>
+	Konstruktor ist immer __construct() (PHP5) oder Klassenname als Funktion (PHP4)
+</li>
+<li>
+	wenn in PHP5 __construct fehlt sucht es automatisch nach Klassennamen-Funktion
+</li>
+<li>
+	OOP in PHP4 liefert: Klassen, Ableitung, Umwandlung/Casting, neu in PHP5 sind Interfaces, Reflection, Autoloading, Objekt-Iteration
+</li>
+<li>
+	Neue Schlüsselwörter in PHP5 sind try, protected, php_user_filter und throw, static gab es schon in PHP4
+</li>
+<li>
+	$this ist immer eine Referenz auf das aufrufende Objekt
+</li>
+<li>
+	Objekt über $object = new Class(), seit PHP 5.3 geht auch $object = "Class"
+</li>
+<li>
+	Objekte können mit clone() geklont werden, Eigenschaften werden kopiert – sind Referenzen definiert so bleiben diese aber Referenzen (shallow copy)
+</li>
+<li>
+	Objektvergleich mit ==: Objekte sind gleich, wenn Attribute identisch und wenn Sie Instanzen derselben Klasse sind
+</li>
+<li>
+	Objektvergleich mit ===: Objekte sind gleich, wenn sie dieselbe Instanz derselben Klasse referenzieren
+</li>
+<li>
+	Objekte werden mit __toString() automatisch in Strings gewandelt, wenn das erwartet wird (z.B. bei print, Funktionsaufrufen mit Strings, …)
+</li>
+<li>
+	Bei Serialisierung wird automatisch __sleep() aufgerufen (z.B. für Festlegung, welche Attribute serialisiert werden sollen), bei De-Serialisierung
+	__wakeup() z.B. für eigene DB-Verbindung
+</li>
+<li>
+	Direktaufruf einer nicht-statischen Funktion z.B. MyClass::myfunction() führt zu Warnung E_STRICT, ist aber genauso möglich wie
+	MyClass-&gt;myfunction()
+</li>
+<li>
+	In einer Klassenmethode kann u.a. über parent::value und self::value auf Werte innerhalb der Klasse oder der vererbten Klasse zugegriffen werden, andere
+	Operatoren sind bei :: nicht zulässig
+</li>
+<li>
+	Aufruf statischer Variable/Funktion über -&gt; führt zu Notice (richtig wäre ::)
+</li>
+<li>
+	Aufruf nicht-statischer Variable/Funktion über :: erzeugt Strict-Warnung (in PHP5)
+</li>
+<li>
+	Klassen-Konstanten halten den Code „sauber“ und sind schneller als via define()
+</li>
+<li>
+	Instanz kann auch mit Variablennamen aufgerufen werden
+</li>
+<li>
+	Zuordnung einer Instanz zu einer Variablen schafft eine Referenz auf diese Instanz
+</li>
+<li>
+	Vererbung ist (u.a.) sinnvoll...
+</li>
+<ul>
+<li>
+	wenn wenig Hierarchiestufen vorhanden sind
+</li>
+<li>
+	wenn bei Änderungen der Basisklasse auch Änderungen an abgeleiteten Klassen vorgenommen werden müßten
+</li>
+<li>
+	um gleiche Klassen/Methoden auf unterschiedl. Datentypen anzuwenden
+</li>
+<li>
+	bei möglichst flacher Klassenhierarchie
+</li>
+</ul>
+<li>
+	eine Klasse kann nur von eine einzige andere Klasse erben (extends)
+</li>
+<li>
+	class_parents() liefert die Namen der Elternklassen in einem Array
+</li>
+<li>
+	Eigenschaften einer Klasse müssen konstant sein (d.h. nicht zur Laufzeit berechnet oder über . zusammengesetzt), NOWDOC kann aber verwendet werden
+</li>
+<li>
+	public/private/protected für Eigenschaften und Methoden erst ab PHP 5 verfügbar
+</li>
+<li>
+	Nur auf public kann außerhalb der Klasse direkt (-&gt;) zugegriffen werden
+</li>
+<li>
+	public und protected können vererbt werden, private nicht
+</li>
+<li>
+	übergeordnete Eigenschaften können nicht geändert werden (z.B. public-Klasse im Erben als private deklarieren, umgekehrt geht das)
+</li>
+<li>
+	Objekte gleichen Typs haben Zugriff auf private/protected, auch wenn es nicht dieselbe Instanz ist
+</li>
+<li>
+	private-Eigenschaften und Methoden werden nicht vererbt (wesentliche Unterschied zu protected)
+</li>
+<li>
+	Protected-Funktionen können in vererbten Klassen überschrieben werden, Protected-Eigenschaften aber nicht!
+</li>
+<li>
+	Klassen und Methoden können „final“ gesetzt werden – Klassen sind nicht vererbbar, Methoden können nicht mehr überschrieben werden
+</li>
+<li>
+	Für Variablen/Eigenschaften gib es „final“ nicht!
+</li>
+<li>
+	Bei Vererbung von einer finalen Klasse &gt; Fatal Error
+</li>
+<li>
+	Funktionen aus Elternklasse können über parent::myfunction() aufgerufen werden selbst wenn sie in der Tochterklasse überschrieben wurden
+</li>
+<li>
+	Kindklasse führt Konstruktor des Vaters nicht aus nur über parent::__construct();
+</li>
+<li>
+	Exception ist auch eine Klasse und hat folgende Methoden: getCode(), getMessage(), getFile(), getLine(), getTrace(), getTraceAsString(), getPrevious()
+</li>
+<li>
+	Exceptions erst in PHP5 verfügbar:
+	<pre>
+	function inverse($x) {
+		if (!$x) {
+			throw new Exception('Division durch Null.');
+		} else return 1/$x;
+	}
+	
+	try {
+		echo inverse(5) . "\n";
+		echo inverse(0) . "\n";
+	} catch (Exception $e) {
+		echo 'Exception abgefangen: ', $e-&gt;getMessage(), "\n";
+	}
+	</pre>
+</li>
+<li>
+	set_exception_handler() erstellt eigenen Handler für Exceptions – gilt für die gesamte Anwendung
+</li>
+<li>
+	restore_exception_handler() stellt wieder auf Standard-Exception zurück
+</li>
+<li>
+	Exceptions, die nicht abgefangen werden, lösen IMMER einen Fatal Error aus
+</li>
+<li>
+	__destruct() wird immer beim Skriptende ausgeführt oder wenn alle Referenzen auf ein Objekt entfernt wurden
+</li>
+<li>
+	Exception aus einem Destruktor heraus führt zum Fatal Error, aus einem Konstruktor heraus aber möglich
+</li>
+<li>
+	Statische Variablen/Methoden sind nicht Teil einer Instanz, Operator ist Klassenname::statische_variable
+</li>
+<li>
+	Statische Variablen können Strings/Konstanten sein, keine berechneten Ausdrücke
+</li>
+<li>
+	Statische Methoden können nur auf statische Variablen einer Klasse zugreifen, können aber abstrakt sein und vererbt werden
+</li>
+<li>
+	$this funktioniert bei statischen Methoden nicht &gt; Instanz-unabhängig
+</li>
+<li>
+	__autoload lädt benötigte Klassen und Interfaces automatisch, wenn diese bei der Ausführung aufgerufen werden – muss aber um Dateiendung .php ergänzt
+	werden
+</li>
+<li>
+	Exceptions in __autoload können nicht abgefangen werden &gt; Fatal Error
+</li>
+<li>
+	Implementierung: spl_autoload, ansonsten noch spl_autoload_register() um eine eigene Funktion als Implementierung von __autoload festzulegen
+</li>
+<li>
+	Abstrakte Klassen (Schlüsselwort extends) sind Bauplan für Klassen, können Implementierung enthalten
+</li>
+<li>
+	Wenn eine Methode in einer abstrakten Klasse gesetzt wird gilt sie automatisch in allen abgeleiteten Klassen
+</li>
+<li>
+	Alle Methoden einer abstrakten Klasse müssen implementiert werden
+</li>
+<li>
+	Abstrakte Klassen können vererbt werden, Interfaces nicht
+	<pre>
+	abstract class AbstractClass {
+		abstract protected function getValue();
+		abstract protected function prefixValue($prefix);
+		
+		public function printOut() {
+			print $this-&gt;getValue() . "\n";
+		}
+	}
+	
+	class ConcreteClass1 extends AbstractClass {
+		protected function getValue() {
+			return "ConcreteClass1";
+		}
+		
+		public function prefixValue($prefix) {
+			return "{$prefix}"; // Korrekt, weil public&gt;protected
+		}
+	}
+	</pre>
+</li>
+<li>
+	Interfaces (Schlüsselwort implements) definiert public-Methoden und Konstanten, die alle abgeleiteten Klassen enthalten müssen (ansonsten Fatal Error),
+	Interfaces sind gut als „Maßnahme“ für Entwickler, da diese implementiert werden müssen
+	<pre>
+	interface a {
+		const b = 'Meine Konstante';
+		public function setVariable($name, $var);
+		public function baz(Baz $baz);
+	}
+	
+	echo a::b; // Ausgabe: Meine Konstante
+	
+	class b implements a {
+		const b = 'Klassenkonstante'; // funktioniert nicht
+		
+		public function setVariable($name, $var) {
+			$this-&gt;vars[$name] = $var;
+		}
+	
+		public function baz(Baz $baz) {
+			echo 'Lalala';
+		}
+	}
+	</pre>
+</li>
+<li>
+	Interface-Konstanten können nicht verändert werden
+</li>
+<li>
+	Eine Klasse kann mehrere Interfaces implementieren, wenn aber identische Funktionsnamen in diesen vorhanden sind &gt; Fehler
+</li>
+<li>
+	Interface kann wie eine Klasse über extends erweitert werden
+</li>
+<li>
+	Reflection: Erlaubt das Untersuchen von Objekten, Klassen, Methoden, …
+	<pre>
+	class A {
+		public $one = '';
+		public $two = '';
+		
+		public function echoOne() {
+			echo $this-&gt;one."\n";
+		}
+		
+		public function echoTwo() {
+			echo $this-&gt;two."\n";
+		}
+	}
+
+	$a = new A();
+	$reflector = new ReflectionClass('A');
+	
+	// Now get all the properties from class A in to $properties array
+	$properties = $reflector-&gt;getProperties();
+	$i = 1;
+	
+	// Now go through the $properties array and populate each property
+	foreach($properties as $property) {
+		// Populating properties
+		$a-&gt;{$property-&gt;getName()}=$i;
+		
+		// Invoking the method to print what was populated
+		$a-&gt;{"echo" . ucfirst($property-&gt;getName())}() . "\n";
+		$i++;
+	}
+	</pre>
+</li>
+<li>
+	Reflector-Methoden sind ansonsten z.B. getConstants(), getFileName(), getMethod(), getStaticProperties(), isInterface(), isUserDefined(), hasMethod(),
+	...
+</li>
+<li>
+	Reflections können praktisch alles instanzieren, modifizieren und auslesen aber keine statischen Variablen in Funktionen ändern
+</li>
+<li>
+	Reflections nützlich für PHP-interne und eigene Funktionen/Klassen/Objekte
+</li>
+<li>
+	Get-Funktionen von Reflections geben meist ein Array zurück
+</li>
+<li>
+	über Type Hinting können Datentypen (Array, Object und NULL) für Funktionsparameter vorgegeben werden wenn diese nicht passen: Fatal Error
+	<pre>
+	public function test_array(array $input_array) {
+		print_r($input_array); // ausgeführt, wenn Array übergeben
+	}
+	</pre>
+</li>
+<li>
+	Late Static Binding: Hiermit kann die aufgerufene Klasse im Kontext statischer Vererbung referenziert werden – nützlich bei Vererbungen, bei der eine
+	bestimmte Methode/Variable erst in einer Instanz statisch werden soll
+</li>
+<li>
+	Schlüsselwort: static::myFunction(), folgt keinerlei Vererbungsregeln, wird auch nicht durch parent:: und self:: beeinflußt Beispiel:
+	<pre>
+	class A {
+		public static function who() {
+			echo __CLASS__;
+		}
+		
+		public static function test() {
+			static::who();
+		}
+	}
+	
+	class B extends A {
+		public static function who() {
+			echo __CLASS__;
+			parent::test();
+		}
+	}
+	
+	A::test(); // Ausgabe: A
+	B::test(); // Ausgabe: B wg. Late Static Binding
+	B::who(); // Ausgabe: B, B
+	</pre>
+</li>
+<li>
+	Magic Methods werden von PHP automatisch ausgeführt, wenn nicht-existente Eigenschaften aufgerufen werden
+</li>
+<li>
+	Magische Funktionen in PHP4: __sleep(), __wakeup() für Serialisierung
+</li>
+<li>
+	__call wird aufgerufen, wenn Funktion nicht vorhanden:
+	<br/>
+	<br/>
+</li>
+<li>
+	public function __call($nameDerMethode, $argumentsDerMethode) { }
+	<br/>
+	<br/>
+</li>
+<li>
+	seit PHP 5.3 auch für statische Methoden: __callStatic()
+</li>
+<li>
+	__get($variable) nur für Variablen (wenn nicht vorhanden)
+</li>
+<li>
+	__clone() wird immer beim Klonen von Objekten ausgeführt
+	<br/>
+	<br/>
+</li>
+<li>
+	__invoke-Methode wird aufgerufen, wenn Objekt als Funktion aufgerufen wird:
+	<pre>
+	Class MyClass {
+		function __invoke($value) {
+			echo $value;
+		}
+	}
+	$myClass = new MyClass();
+	$myClass('Hossa'); // Ausgabe 'Hossa'
+	</pre>
+</li>
+<li>
+	__set_state setzt Rückgabewert, wenn Klasse mit var_export() exportiert wird
+</li>
+<li>
+	bei magischen Methoden dürfen keine Referenzen übergeben werden
+</li>
+<li>
+	foreach() kann auch für Objekte benutzt werden, optimal mit Iterator
+</li>
+<li>
+	Serialisierung erlaubt es, Objekte in Strings zu speichern
+</li>
+<li>
+	um serialisierten String sicher zu transportieren am besten per base64_encode encodieren
+</li>
+<li>
+	Um das Objekt zu de-serialisieren muß die Klasse definiert sein – umsetzbar z.B. über include() oder spl_autoload_register() der Klasse aus externer
+	Datei
+</li>
+<li>
+	Empfehlung: Klassendefinition in der gesamten Anwendung verfügbar machen
+</li>
+</ul>
+
+
+
+<h3>
+	SPL
+</h3>
+
+
+
+<ul>
+<li>
+	Sammlung von Klassen &amp; Interfaces um häufige Probleme zu lösen, v.a. Iteratoren:
+</li>
+<li>
+	Iterator: Basis-Interface, von dem nahezu alle weiteren erben (Methoden next, current, key, rewind, valid), ermöglicht Durchlauf aller Elemente einer
+	„Struktur“ ohne den die Implementierung der Struktur zu kennen
+</li>
+<li>
+	Hilfsmittel-Interface „Traversable“ klärt, ob Klasse iterierbar ist:
+	<pre>
+	if(!is_array($items) &amp;&amp; !$items instanceof Traversable) {
+		//Throw exception here
+	}
+	</pre>
+</li>
+<li>
+	IteratorAggregate verlangt nicht die Implementierung aller Iterator-Methoden sondern lädt hten via getIterator(), die dann auf separate Iterator-Klasse
+	zugreift – erlaubt die Wiederverwendung von Iteratoren
+</li>
+<li>
+	SeekableIterator: Erweiterung um seek()-Methode für Sprung zu Index
+</li>
+<li>
+	RecursiveIterator: Iteration über mehrdimensionale Objekte, ergänzt Iterator um Methoden getChildren(), hasChildren(), ParentIterator filtert alles ohne
+	Kinder aus
+</li>
+<li>
+	ArrayIterator: Schlüssel &amp; Werte während Iteration in Arrays &amp; Objekten ändern und löschen, Methoden count(), current(), next(), seek(), valid()
+	sowie Sortierungen
+</li>
+<li>
+	ArrayIterator kann nicht ohne Weiteres zum vorherigen Element springen
+</li>
+<li>
+	RecursiveArrayIterator unterstützt mehrdimensionale Arrays
+</li>
+<li>
+	ArrayAccess kann Objekte als Arrays ansprechen – Methoden offsetExists(), offsetGet(), offsetSet(), offsetUnset()
+</li>
+<li>
+	ArrayObject: Objekte lassen sich wie Arrays behandeln (sortieren, serialisieren, einfügen, entfernen, ...), erweitert ArrayAccess, Methoden wie
+	getFlags(), natsort()
+	
+	<pre>
+	$myobject = new ArrayObject($data);
+	$pointer = $myobject-&gt;getIterator();
+	
+	for($pointer-&gt;rewind();$pointer-&gt;valid();$pointer-&gt;next() {
+		// do something
+	}
+	</pre>
+</li>
+<li>
+	DirectoryIterator: Interface um Inhalte von Verzeichnissen zu lesen, Methoden z.B. getFilename(), getSize(), isDot(), isWritable(), nutzt SplFileInfo
+</li>
+<li>
+	RecursiveDirectoryIterator: Wie DirectoryIterator, aber mehrere Ebenen Methoden z.B. getDepth(), beginChildren(), nextElement()
+</li>
+<li>
+	SplFileObject kann Dateien objektorientiert lesen, schreiben und Infos ausgeben, Methoden z.B. getFileName(), getOwner(), isDir(), openFile(),
+	setFileClass()
+</li>
+<li>
+	SplObjectStorage: Schafft eindeutige ID für Objekte (Map), z.B. sinnvoll um ein Element aus Menge zu entfernen ohne über alles iterieren zu müssen
+</li>
+<li>
+	FilterIterator: Überprüft Daten mit abstrakter accept()-Methode
+</li>
+<li>
+	SimpleXMLIterator iteriert über XML-Dokumente, Mehoden wie xpath(), attributes(), getName(), valid()
+</li>
+<li>
+	LimitIterator: beschränkt die Ergebnisse mit Startindex und Länge (via Parameter)
+</li>
+<li>
+	CachingIterator untersucht das folgende Element, z.B. über Methode hasNext()
+</li>
+<li>
+	Countable: Klassen lassen sich über count-Methode „zählen“:
+	<pre>
+	class CountMe implements Countable {
+		protected $myCount = 3;
+		
+		public function count() {
+			return $this-&gt;myCount;
+		}
+	}
+	
+	$countable = new CountMe();
+	echo count($countable); // result is "3" as expected
+	</pre>
+</li>
+<li>
+	Exceptions: SPL bringt viele eigene Exceptions mit, z.B. InvalidArgumentException, LengthException, OutOfBoundsException
+</li>
+<li>
+	SplFixedArray: Array mit fester Größe, performanter als array()
+</li>
+<li>
+	SplStack (LIFO) und SplQueue (FIFO) sind teilweise deutlich schneller als array(), ZipArchive erlaubt Lesen, Erstellen und Entpacken von Zips
+</li>
+</ul>
+
+
+
+<h2>
+	ARRAYS
+</h2>
+
+
+<ul>
+<li>
+	count(Array, Recursive) und Alias sizeof() geben Anzahl der Array-Werte zurück
+</li>
+<li>
+	Array-Keys können nur Integer und Strings sein, Floats werden auf Integer gekürzt
+</li>
+<li>
+	Integerund String-Keys können gemischt werden, dürfen aber nicht den gleichen Wert haben &gt; dann überschreibt der letzte den ersten
+</li>
+<li>
+	Werte werden bei Arrays immer kopiert, es sei denn, man setzt Referenz (&amp;)
+</li>
+<li>
+	Schlüssel werden automatisch gesetzt:
+	<pre>
+	array(5=&gt;16, 42, 23, ''x'=&gt;12); // ergibt
+	array(5=&gt;15, 6=&gt;42, 7=&gt;23, 'x'=&gt;12);
+	</pre>
+</li>
+<li>
+Wenn kein Schlüssel gesetzt ist wird automatisch der höchste Int-Wert aller Schlüssel +1 verwendet
+</li>
+<li>
+	Bei Schlüssel-Dopplung Integer/String bleibt nur der letzte Schlüssel erhalten:
+	<pre>
+	array(0=&gt;'X',1=&gt;'A','1'=&gt;'B','C'); //ergibt (0=&gt;'X',1=&gt;'B',2=&gt;'C');
+	</pre>
+</li>
+<li>
+	Negative Indexwerte sind in Arrays bis PHP 4.3 erlaubt und werden bei automatischer Index-Erhöhung normal behandelt
+</li>
+<li>
+	Bei PHP5 werden nur Zahlen &gt; 0 für automatische Indizes vergeben
+</li>
+<li>
+	extract(Array, Type, Prefix) setzt Werte aus einem Array in Variablen, Variablenname ist der Schlüssel (Sicherheitsrisiko)
+</li>
+<li>
+	Für Iteration in einem Array: each(), next(), current()
+</li>
+<li>
+	Beim Löschen aller Werte aus einem Array werden Schlüssel nicht zurückgesetzt
+</li>
+<li>
+	Array-Indizes immer in Hochkommas setzen:
+	<pre>
+	$foo['bar'] // korrekt
+	$foo[bar] // funktioniert, wenn es keine Konstante bar gibt &gt; unsauber
+	</pre>
+</li>
+<li>
+	Array-Konvertierung einer Fremd-Variable führt zu Array mit Index 0 und dem Wert
+</li>
+<li>
+	Konvertierung Objekt&gt;Array setzt Objekteigenschaften als Werte des Arrays
+</li>
+<li>
+	seit PHP5 können Array-Werte in foreach direkt geändert werden, wenn sie als Referenz übergeben werden:
+	<pre>
+	$colors = array('red', 'blue', 'green');
+	foreach($colors as &amp;$color) {
+		$color = strtoupper($color); // ergibt Array RED, BLUE, GREEN
+	}
+	</pre>
+</li>
+<li>
+	range() füllt ein Array mit Zwischenwerten, Standardschritt 1:
+	<pre>
+	$x = range(1.2, 4.1) // array(1.2,2.2,3.2)
+	</pre>
+</li>
+<li>
+	list(Array) ist nützlich, um Array-Inhalten Variablennamen zuzuweisen, weist Werte von rechts zu, funktioniert nur mit nicht-assoziativen Arrays:
+	<pre>
+	$info = array('Kaffee', 'braun', 'Koffein');
+	list($drink, $color, $power) = $info;
+	echo "$drink ist $color und $power macht es zu was besonderem.“;
+	</pre>
+</li>
+<li>
+	foreach() normalerweise am effizientesten, um durch ein Array zu gehen, arbeitet aber mit einer Kopie des Arrays, funktioniert also nicht mit Referenzen
+</li>
+<li>
+	foreach() kann seit PHP5 auch über Objekte iterieren
+</li>
+<li>
+	array_push(Array, New1, New2, ...) fügt Elemente am Ende hinzu, kann mehrere Werte einfügen, bei einem einzelnen Wert ist $x[] schneller
+</li>
+<li>
+	array_unshift(Array, New1, New2, ...) fügt Elemente am Anfang des Arrays ein
+</li>
+<li>
+	Rückgabewerte sind jeweils die Anzahl der Array-Elemente
+</li>
+<li>
+	array_pop(Array) entfernt 1 Element am Ende des Arrays
+</li>
+<li>
+	array_splice(Array, Offset, Length, Replacement) entfernt Werte ab einem bestimmten Index aus dem Array
+</li>
+<li>
+	array_shift(Array) entfernt 1 Element am Anfang des Arrays
+</li>
+<li>
+	Achtung: Rückgabewert ist jeweils der entfernte Wert, nicht das neue Array!
+</li>
+<li>
+	array_fill(Index, Amount, NewValue):Array füllt Array mit dem übergebenen Wert
+</li>
+<li>
+	array_fill_keys(KeysArray, Value):Array erzeugt Array aus Keys mit einem Wert
+</li>
+<li>
+	array_pad(Array, Amount, Value) füllt ein übergebenes Array mit Werten auf
+</li>
+<li>
+	array_slice(Array, Offset, Length, preserve_keys) extrahiert einen Teil des Arrays, Ordnet Schlüssel neu an, wenn preserve_keys nicht gesetzt ist, gibt
+	den extrahierten Teil des Arrays zurück
+</li>
+<li>
+	array_combine(KeysArray, VArray) kombiniert KeysArray=Keys, VArray=Werte
+</li>
+<li>
+	array_flip(Array) vertauscht Schlüssel und Werte eines assoziativen Arrays, erzeugt ggf. das assoziative Array
+</li>
+<li>
+	array_key_exists(Key, SearchArray) überprüft auf Existenz eines Keys
+</li>
+<li>
+	array_keys(Array, SearchValue, Strict) ist ein Array aller Keys eines übergebenen Arrays
+</li>
+<li>
+	array_reverse(Array, preserve_keys) gibt neues Array mit umgedrehten Werten zurück, bei preserver_keys bleiben Schlüssel erhalten
+</li>
+<li>
+	array_sum(Array) addiert alle Werte in einem Array, array_product(Array) multipliziert
+</li>
+<li>
+	array_intersect(Array1, Array2, ...) gibt alle Werte aus, die in Array1 und allen folgenden Arrays enthalten sind
+</li>
+<li>
+	array_count_values(Array) gibt an, welcher Wert wie oft in einem Array enthalten ist
+</li>
+<li>
+	array_map('Callback', Array1, Array2, …):Array führt Callback auf alle Werte eines Arrays aus, gibt Ergebnis zurück – wenn Anzahl der Parameter nicht
+	stimmt: Warning
+	<pre>
+	function cube($n) {
+		return($n * $n * $n);
+	}
+	
+	$a = array(1, 2, 3, 4, 5);
+	$b = array_map("cube", $a);
+	print_r($b); // ergibt array(1,8,27,64,125)
+	</pre>
+</li>
+<li>
+	array_map() kann auch mehrere Arrays verarbeiten
+</li>
+<li>
+	array_walk(Array, 'Callback'):Boolean macht dasselbe, gibt aber nur zurück, ob die Anwendung erfolgreich war, kann auch mit Keys bearbeiten
+</li>
+<li>
+	array_walk_recursive(Array, 'Callback') funktioniert mit mehrdimensionalen Arrays:
+	
+	<pre>
+	$sweet = array('a' =&gt; 'Apfel', 'b' =&gt; 'Banane');
+	$fruits = array('süß' =&gt; $sweet, 'sauer' =&gt; 'Zitrone');
+	array_walk_recursive($fruits, 'myfunction');
+	</pre>
+	
+	myfunction() würde dann aber den Schlüssel „süß“ nicht verarbeiten.
+</li>
+<li>
+	unset($array[3]) entfernt Werte aus Array, ansonsten das gesamte Array
+</li>
+<li>
+	shuffle(Array) mischt die Werte eines Array zufällig und vergibt neue Schlüssel, nutzt dabei automatisch eine Referenz
+</li>
+<li>
+	Sortierung über sort(Array, Flags), es kann über Parameter nach Zahlen (SORT_NUMERIC), Strings (SORT_STRING) oder lokalen Einstellungen
+	(SORT_LOCALE_STRING) sortiert werden
+</li>
+<li>
+	Sortierungsarten:
+</li>
+<ul>
+<li>
+	rückwärts: rsort()
+</li>
+<li>
+	für assoziative Arrays: asort() / umgekehrt: arsort
+</li>
+<li>
+	Sortierung nach Schlüssel: ksort() / umgekehrt: krsort()
+</li>
+<li>
+	Benutzerdefiniert: usort(Array, 'Function'), weist neue Schlüssel zu
+</li>
+<li>
+	Benutzerdefiniert: uasort(Array, 'Function'), behält Schlüssel
+</li>
+<li>
+	Benutzerdefiniert nach Schlüsseln: uksort(Array, 'Function')
+</li>
+<li>
+	Natürliche Sortierung: natsort()
+	<pre>
+	$foo = array('img1.jpg', 'img12.jpg', 'img3.jpg');
+	natsort($foo); // Ergebnis: img1.jpg, img3.jpg, img12.jpg
+	</pre>
+</li>
+</ul>
+<li>
+	Achtung: Sortierungen liefern nicht das Array zurück, sondern nur true oder false!
+</li>
+<li>
+	array_merge(Array1, Array2, ...) fügt Arrays zusammen, gibt Ergebnis-Array zurück, akzeptiert seit PHP5 nur Arrays als Eingabewerte (vorher auch andere
+	Datentypen)
+</li>
+<li>
+	array_merge() ordnet numerische Schlüssel immer neu an
+</li>
+<li>
+	wenn Schlüssel-Werte bei array_merge() Strings &amp; identisch sind dann überschreibt der Wert des letzten Arrays die vorherigen – bei numerischen Werten
+	wird hingegen angehängt
+</li>
+<li>
+	Wenn Arrays zusammengefügt, aber nicht neu angeordnet und nichts überschrieben werden soll funktioniert auch das:
+	<pre>
+	$foo = $array1 + $array2;
+	</pre>
+</li>
+<li>
+	Die Schlüssel werden nicht überschrieben, bei Gleichheit wird aber der zweite ignoriert
+</li>
+<li>
+	array_diff(Array1, Array2, ...) vergleicht Arrays, Rückgabewert sind alle Werte, die in Array1 aber nicht in Array2 enthalten sind – Schlüssel werden
+	ignoriert!
+</li>
+<li>
+	array_diff_assoc(Array1, Array2, ...) vergleicht Schlüssel und Werte
+</li>
+<li>
+	array_diff_key(Array1, Array2, ...) vergleicht nur Schlüssel
+</li>
+<li>
+	Ein Vergleich von Arrays (===) ergibt true, wenn Schlüsselund Wertepaare gleich sind und die Reihenfolge übereinstimmt
+</li>
+<li>
+	Iterator-Interface ermöglicht es, ein Objekt in einer foreach-Schleife auszuführen:
+	<pre>
+	class SomeIterator implements Iterator {...}
+	
+	$it = new SomeIterator();
+	foreach($it as $key =&gt; $val) {
+		print "{$key}=&gt;{$val}\n";
+	}
+	</pre>
+</li>
+</ul>
+
+
+
+<h2>
+	STRINGS &amp; PATTERNS
+</h2>
+
+
+
+<ul>
+<li>
+	Keine Zeichenbegrenzung bei Strings, Maximum=Arbeitsspeicher
+</li>
+<li>
+	ctype_alpha(String) ergibt true, wenn String nur aus Buchstaben besteht
+</li>
+<li>
+	String-Überprüfung mit empty() oder auch if($string) bzw. if($string!==““)
+</li>
+<li>
+	+ funktioniert für Strings in PHP nicht, String wird in Zahl umgewandelt und addiert
+</li>
+<li>
+	Checksummen am besten über md5(), sha1() oder crc32()
+</li>
+<li>
+	Vergleich zwischen String und Zahl ergibt true (z.B. 123 == '123' / 'bla' == 0)
+</li>
+<li>
+	nl2br wandelt Zeilenumbrüche \n \r nach &lt;br&gt; um
+</li>
+<li>
+	Strings können auch über Offset gelesen/gesetzt werden: $str[42] ist Buchstabe 42
+</li>
+<li>
+	Single Quote mit \ escapen, Backslash \ über \\, $-Zeichen auch mit \
+</li>
+<li>
+	Doppelte “ bieten mehr Optionen (Variablenersetzung) als einfache '
+</li>
+<li>
+	besser Single Quotes verwenden, solange sie nicht im Text selbst vorkommen
+</li>
+<li>
+	Löschen einzelner Zeichen über unset($string[1]) liefert PHP4 Warning, PHP5 Error
+</li>
+<li>
+	htmlentities(String, Flags, Charset, Double) wandelt alle anwendbaren Zeichen in HTML, bei Double werden bestehende HTMLs ignoriert
+</li>
+<li>
+	revers: html_entity_decode()
+</li>
+<li>
+	htmlspecialchars(String, Flags, Charset, Double) wandelt nur Sonderzeichen in HTML
+</li>
+<li>
+	addslashes(String) maskiert Sonderzeichen mit \, bei addcslashes(String, Charlist) kann vorgegeben werden, bei welchen Zeichen das passieren soll
+</li>
+<li>
+	wordwrap(String, Width, BreakCharacter, Cut) fügt Trennzeichen (z.B. &lt;br&gt;) alle X Zeichen ein (benutzerdefiniert), kann mit „Cut“-Parameter=false
+	gezwungen werden, nie ganze Wörter zu trennen
+</li>
+<li>
+	parse_str(String, Array) parst einen String wie GET-Variablen, Beispiel:
+	
+	<pre>
+	$bla = 'a=1&amp;b=40+10';
+	$result = array()
+
+	parse_str($bla, $result); // Ergebnis wird in $result gespeichert
+	
+	echo $a; // 1
+	echo $b; // 40 10
+	</pre>
+</li>
+<li>
+	HEREDOC Syntax mit &lt;&lt;&lt;IDENTIFIER und Double Quotes, nicht einrücken
+</li>
+<li>
+	Kann nahezu überall verwendet werden, nur nicht bei Klassenvariablen
+</li>
+<li>
+	Beim Identifier sind nur alphanum. Zeichen/Unterstrich erlaubt, keine Zahl am Anfang
+</li>
+<li>
+	Identifier am Ende darf keine anderen Zeichen außer ; enthalten (keine Leerzeichen)
+</li>
+<li>
+	ab PHP 5.3 kann statische Variable/Klassenkonstante mit NOWDOC gesetzt werden, Text wird dann nicht geparst $str = &lt;&lt;&lt;'IDENTIFIER'
+</li>
+<li>
+	NOWDOCs können auch in jedem statischen Kontext genutzt werden
+</li>
+<li>
+	Variablenersetzung in Strings sehr tolerant, auch bei Arrays:
+	<pre>
+	$str = “Hello $greeting[3] guys“; // works
+	$str = “Hello {$greeting[3]} guys“; // works
+	$str = “Hello ${greeting[3]} guys“; // works
+	$str = “Hello ${greeting[foo]}“; // fails, looks for constant 'foo'
+	$str = “Hello $greeting[3]s guys“; // fails
+	</pre>
+</li>
+<li>
+	strval(Value) wandelt andere Datentypen zu Strings
+</li>
+<ul>
+<li>
+	Boolean true wird '1', false '', String in Boolean ergibt immer true, es sei denn, der String ist leer oder '0'
+</li>
+<li>
+	Integer und Floats bleiben erhalten, umgekehrt werden Strings immer 0
+</li>
+<li>
+	Arrays ergeben 'Array', Objects 'Object'
+</li>
+<li>
+	seit PHP 5 wird automatisch die __toString()-Methode aufgerufen
+</li>
+<li>
+	Resources ergeben 'Resource id #1'
+</li>
+</ul>
+<li>
+	Bei mathematischen Operationen werden Strings meist automatisch in Zahl gewandelt, ab Leerzeichen wird aber abgeschnitten
+	<pre>
+	$str = 1 + '10.5'; // ergibt 11.5
+	$str = 1 + 'bob3'; // ergibt 1
+	$str = 1 + '10 little babies'; // ergibt 11
+	$str = 1 + '15.6 little babes'; // ergibt 16.6
+	$str = 1 + '15,6 little babes'; // ergibt 16, Kommas werden ignoriert
+	</pre>
+</li>
+<li>
+	Substrings mit substr(String, Start, Length):String
+</li>
+<li>
+	Gibt false zurück, wenn z.B. Länge zu kurz, Offset zu weit oder beides
+</li>
+<li>
+	substr() funktioniert mit Boolean TRUE, aber nicht mit FALSE oder Leerzeichen
+</li>
+<li>
+	substr() kann auch mit negativem Wert und Index umgehen &gt; Index zählt von hinten, Länge zieht den Wert von Gesamtlänge ab
+</li>
+<li>
+	substr_count(Haystack, Needle, Offset, Length) zählt Anzahl von Needle, case-sensitive
+</li>
+<li>
+	str_replace(Needle, Replacement, Haystack, Count) ersetzt String mit einem anderen, Parameter „Count“ zählt die Ersetzungen
+</li>
+<li>
+	str_replace() funktioniert auch mit Arrays – dann werden mehrere Strings ersetzt:
+	<pre>
+	echo str_replace(array('Hello', 'World'), array('Bonjour', 'Monde'), 'Hello World'); // ergibt 'Bonjour Monde'
+	</pre>
+</li>
+<li>
+	str_ireplace ignoriert Großund Kleinschreibung
+</li>
+<li>
+	es gibt auch substr_replace(String, Replacement, Start, Length) mit Offset und Länge
+</li>
+<li>
+	substr_compare(Haystack, Needle, Offset, Length, Case_Insesitivity) vergleicht Teile von Strings: 1 bei &gt;, -1 bei &lt;, 0 bei =:
+	<pre>
+	echo substr_compare("abcde", "bc", 1, 3); // 1
+	</pre>
+</li>
+<li>
+	Positionen mit strpos(Haystack,Needle, Offset):Integer
+</li>
+<li>
+	stripos(Haystack,Needle, Offset) ignoriert Groß/Kleinschreibung
+</li>
+<li>
+	strripos(Haystack,Needle, Offset) findet das letzte Offset
+</li>
+<li>
+	strrpos(Haystack,Needle, Offset) unterstützt in PHP4 nur ein Zeichen als Suchmuster
+</li>
+<li>
+	strtr(String, Haystack, Replacement) kann Zeichen frei austauschen, auch mit Arrays:
+	<pre>
+	echo strtr("abc", "a", "1"); // ergibt 1bc
+	$trans = array("h" =&gt; "-", "hello" =&gt; "hi", "hi" =&gt; "hello");
+	echo strtr("hi all, I said hello", $trans); // hello all, I said hi
+	</pre>
+</li>
+<li>
+	strstr(Haystack, Needle, BeforeNeedle) findet ebenfalls erstes Vorkommen in einem String, liefert aber den Ergebnis-String ab (bei BeforeNeedle: vor) dem
+	Index zurück
+</li>
+<li>
+	Alias ist strchr()
+</li>
+<li>
+	strstr() ist langsamer als strpos()
+	<pre>
+	$email = 'name@example.com';
+	$domain = strstr($email, '@');
+	echo $domain; // Ausgabe: @example.com
+	
+	$user = strstr($email, '@', true); // Ab PHP 5.3.0
+	echo $user; // Ausgabe: name
+	</pre>
+</li>
+<li>
+	strpbrk(Haystack, CharcterList):String durchsucht String nach Zeichen, gibt Rest des Strings zurück, Groß-/Kleinschreibung wird berücksichtigt:
+	
+	<pre>
+	echo strpbrk('Dies ist ein einfacher Test', 'tixyz');
+	// Ausgab: 'ies ist ein einfacher Test'
+	</pre>
+</li>
+<li>
+	strrev(String) dreht einen String um
+</li>
+<li>
+	strtok(Haystack, Token):String teilt einen String an einem Trennzeichen (Token) auf, Haystack muß nur beim ersten Aufruf übergeben werden
+</li>
+<li>
+	ucfirst(String) macht ersten Buchstaben eines Strings groß
+</li>
+<li>
+	strcmp(String1, String2) vergleicht Strings (case-sensitive, strcasecmp() ist insensitive), Vergleich strcmp(1, '1') liefert 0 &gt; erwartet String
+</li>
+<li>
+	strcmp() ist binärsicher und daher die beste Möglichkeit, Strings zu vergleichen
+</li>
+<li>
+	Vergleich mit === oder !== überprüft Datentyp (nützlich bei strpos&gt; 0 oder false)
+</li>
+<li>
+	strspn(Haystack, AllowedCharacters, Start, Length) vergleicht String mit Whitelist, liefert Anzahl der korrekten Zeichen zurück:
+	<pre>
+	echo strspn('133445abcdef', '12345'); // ergibt 6
+	</pre>
+</li>
+<li>
+	similar_text(String1, String2, Percent) liefert Anzahl der gemeinsamen Buchstaben zweier Strings, levenshtein(String1, String2) Anzahl der Schritte, die
+	nötig sind, um String 2 aus String 1 zu machen
+</li>
+<li>
+	levenshtein() akzeptiert maximal 255 Zeichen, ansonsten Return -1
+</li>
+<li>
+	strlen(String) gibt Länge des Strings aus, ergibt NULL bei Arrays, weiterhin Warnung
+</li>
+<li>
+	count() zählt nur Variablen aber keine Strings, daher Ergebnis immer 1
+</li>
+<li>
+	count_chars(String, Mode) liefert Infos über Zeichen in einem String
+</li>
+<li>
+	str_word_count(String, Format, CharList) liefert Infos über Anzahl der Wörter, Format:
+</li>
+<ul>
+<li>
+	0: Anzahl der Wörter
+</li>
+<li>
+	1: Array mit allen Wörtern
+</li>
+<li>
+	2: Assoziatives Array, Schlüssel ist die Position des Wortes im String
+</li>
+</ul>
+<li>
+	CharList für Zeichen, die auch als Word betrachtet werden sollen
+</li>
+<li>
+	str_word_count() kann über Parameter mit eigenen „Words“ erweitert werden
+</li>
+<li>
+	explode(Delimiter, String, Limit): kann mit Parameter Limit gesetzt werden
+</li>
+<ul>
+<li>
+	positiv: liefert Array mit den Elementen, letztes Element hat Rest des Strings
+</li>
+<li>
+	negativ: liefert Array mit allen außer dem -limit
+</li>
+<li>
+	0: limitiert auf '1'
+</li>
+</ul>
+<li>
+	implode(BindingCharacter, Array) faßt Array zu String zusammen, Alias ist join()
+</li>
+<li>
+	Wenn gesuchter Wert nicht auftaucht dann leeres Array
+</li>
+<li>
+	split() wie explode(), aber deprecated
+</li>
+<li>
+	str_split(String, MaxLength) teilt String in Array, aber festgesetzte Länge der Werte
+</li>
+<li>
+	fprintf(Handle, Format, Value1, Value2, ...) schreibt formatierten String in ein Handle
+	
+	<pre>
+	$fp = fopen('date.txt', 'w');
+	fprintf($fp, "%04d-%02d-%02d", $year, $month, $day);
+	</pre>
+</li>
+<li>
+	vprintf() wie fprintf(), aber akzeptiert Array als Argument und gibt die Länge des ausgegebenen Strings zurück
+	<pre>
+	vprintf("%04d-%02d-%02d", explode('-', '1988-8-1')); // 1988-08-01
+	</pre>
+</li>
+<li>
+	sscanf(String, Format):Array ist wie printf(), überführt aber übergebenen String in anderes Format – sinnvoll für Eingabe:
+	<pre>
+	$data = '123 456 789';
+	$format = '%d %d %d';
+	var_dump(sscanf($data, $format)); //ergibt Array 0=&gt;123, 1=&gt;456,2=&gt;789
+	</pre>
+</li>
+<li>
+	viele Sprachen verlangen nur Singlebyte-Encoding (Latin), Multibyte z.B. Chinesisch &gt; mbstring-Funktionen
+</li>
+<li>
+	utf8_decode(String) decodiert immer nach ISO-8859-1
+</li>
+<li>
+	Standardmäßig kein nativer UTF-8-Support, deswegen scheitern Standard-String-Funktionen bei UTF-8-Strings (z.B. liefert strlen() höhere Werte)
+</li>
+<li>
+	bei mb_substr kann über Parameter das Encoding eingestellt werden, liefert als Rückgabewert alles zwischen 'start' und 'length'
+</li>
+<li>
+	mb_check_encoding(String, Encoding) überprüft einen String auf ein Encoding
+</li>
+<li>
+	setlocale(LC_MONETARY, 'en_US') setzt Berechnungsgrundlage für bestimmte Arten:
+	<pre>
+	echo money_format('%,2n', '100000.698'); // ergibt $100,000.70
+	</pre>
+</li>
+<li>
+	number_format(Number, Decimals) für Formatierung der Stellen einer Zahl:
+	<pre>
+	// Syntax: Variable, Nachkommastellen, Trennung, Tausendertrennung
+	$mynumber = number_format($number, 2, '.', ''); // 1234.56
+	</pre>
+</li>
+<li>
+	sprintf(Format, Value1, Value2, ...) zur Rückgabe formatierter Strings, printf() gibt direkt aus, % ist dabei immer Platzhalter für den ursprünglichen
+	String:
+	<pre>
+	printf('%02d', 7); // gibt 07 aus
+	$bla = sprintf('%.4f', 3,2); // gibt 3,200 zurück
+	</pre>
+</li>
+<li>
+	Wenn %% doppelt auftritt, dann bleibt ein %-Zeichen erhalten
+</li>
+<li>
+	Verschiedene Datentypen:
+</li>
+<ul>
+<li>
+	'b' behandelt das Argument als Integer und Binärzahl
+</li>
+<li>
+	'd' ergibt Integer und Ausgabe als Dezimalzahl
+</li>
+<li>
+	's' steht für String
+</li>
+<li>
+	'c' steht für den ASCII-Wert
+</li>
+<li>
+	'e' steht für wissenschaftliche Schreibweise (eulersche Zahl)
+</li>
+<li>
+	'u' ist vorzeichenlose Dezimalzahl
+</li>
+<li>
+	'f' ist Fließkommawert, 'F' ebenfalls, aber nicht regionenspezifisch
+</li>
+<li>
+	'o' ist Oktalschreibweise
+</li>
+<li>
+	'x' hexadezimal mit kleinen Zeichen, 'X' große Zeichen
+</li>
+</ul>
+<li>
+	+ spezifiziert positives Integer, negativ
+</li>
+<li>
+	Format Swapping: Parameter können Sprachabhängig an verschiedenen Stellen stehen, daher kann Zahl übergeben werden
+	<pre>
+	$num = 5;
+	$location = 'tree';
+
+	$result = 'There are %d monkeys in the %s';
+	printf($result, $num, location); // There are 5...
+	
+	$result = 'The %2$s contains %1&amp;d monkeys';
+	printf($result, $num, $location); // The tree...
+	</pre>
+</li>
+<li>
+	Texte können auch aufgefüllt bzw. abgeschnitten werden:
+	<pre>
+	$str = 'monkey';
+	$longstr = 'many monkeys';
+	
+	printf(''[%10s]\n''), $str); // ergibt [ monkey]
+	printf(''[%010s]\n''), $str); // ergibt [0000monkey]
+	printf(''[%'#10s]\n''), $str); // ergibt [####monkey]
+	printf(''[%10.10s]\n''), $longstr); // ergibt [many monke]
+	</pre>
+</li>
+<li>
+	zwei RegEx-Patterns in PHP: POSIX und PCRE
+</li>
+<li>
+	PCRE ist besser, da binärsicher, wahlweise gierig oder nicht, unterstützt untergeordnete Suchgruppen und teilweise vorkompiliert, daher schneller
+</li>
+<li>
+	per Standard sind RegExes immer gierig, liefern also alles
+</li>
+<li>
+	Delimiter können /, #, ! oder andere Zeichen (kein Backslash, kein Leerzeichen) sein
+</li>
+<li>
+	Meta-Characters steuern die RegEx:
+</li>
+<ul>
+<li>
+	\ escaped Sonderzeichen
+</li>
+<li>
+	^ Start einer Zeile oder Negation von Zeichenklassen [^A..Z]
+</li>
+<li>
+	$ Ende einer Zeile
+</li>
+<li>
+	? Zeichen kann ein oder mehrfach auftreten, macht die RegEx „gierig“, es wird also das Maximum ins Ergebnis einbezogen
+</li>
+<li>
+	. trifft auf jedes Zeichen zu (außer Leerzeichen)
+</li>
+<li>
+	* 0 oder mehr Zeichen
+</li>
+<li>
+	+ 1 oder mehr Zeichen
+</li>
+<li>
+	[] Zeichengruppe (z.B. [a-z]), hierin steht ^ für Negation
+</li>
+<li>
+	| Verzweigung (oder)
+</li>
+<li>
+	() Unter-Pattern: cat(eract | erpillar|) findet cat, cateract und caterpillar
+</li>
+<li>
+	{} Quantifizierung: z{2,4} findet zz, zzz und zzzz, bei z{2,} bis unendliche Zahl 'z'
+</li>
+<li>
+	\d Dezimalzeichen, \D kein Dezimalzeichen
+</li>
+<li>
+	\s Leerzeichen \S kein Leerzeichen
+</li>
+<li>
+	\w Word \W kein Word
+</li>
+<li>
+	\b Wortgrenze, also nur ganze Wörter
+</li>
+<li>
+	\G erste zutreffende Stelle in Zeile
+</li>
+</ul>
+<li>
+	Modifikatoren:
+</li>
+<ul>
+<li>
+	/m Multiline, sucht über Zeilenende hinaus
+</li>
+<li>
+	/e wandelt alles in Großbuchstaben um
+</li>
+<li>
+	/s Suche bricht nicht bei Zeilenumbrüchen ab
+</li>
+<li>
+	/x ignoriert Leerzeichen
+</li>
+<li>
+	/i Großund Kleinschreibung wird ignoriert
+</li>
+<li>
+	/U Suche ist nicht-gierig (ungreedy)
+</li>
+<li>
+	/u Suchmuster werden als UTF-8 behandelt
+</li>
+</ul>
+<li>
+	\ kann auch für besondere Operationen verwendet werden:
+</li>
+<ul>
+<li>
+	\r erzeugt Carriage Return, \n neue Zeile
+</li>
+<li>
+	\t Tabulator
+</li>
+<li>
+	\xhh Zeichen mit Hex-Code hh
+</li>
+</ul>
+<li>
+	Suche mit /\bpattern\b/ liefert also ganze Wörter 'pattern', nichts zusammengesetztes
+</li>
+<li>
+	Performance bei Zeichen-Klassen besser als bei Verzweigungen
+</li>
+<li>
+	[\dABCDEF] würde jede Hexadezimalschreibweise finden
+</li>
+<li>
+	[^\W] findet alles, was kein Unterstrich ist
+</li>
+<li>
+	/a(bc.)+e/ findet abce und abcXbcXe und abcXbcXbcXe ...
+</li>
+<li>
+	Bedingungen möglich über (?(Bedingung) Ja | Nein)
+</li>
+<li>
+	preg_match(Pattern, String, MatchesArray, Flags, Offset) liefert Anzahl der Treffer (0 oder 1) zurück, stoppt nach 1. Treffer
+</li>
+<li>
+	Wenn MatchesArray gesetzt dann enthält diese nachher die Ergebnisse &gt; $matches[0] enthält den Text, auf den das ganze Suchmuster paßt, $matches[1] den
+	für das erste Teilsuchmuster usw.
+</li>
+<li>
+	Flag PREG_OFFSET_CAPTURE: Gibt für jeden Treffer auch das Offset im String zurück
+	
+	<pre>
+	$str = "abcdef";
+	$pattern = '/^def/';
+	
+	preg_match($pattern, substr($str,3), $matches, PREG_OFFSET_CAPTURE);
+	print_r($matches); // ergibt
+	Array(
+		[0] =&gt; Array
+			(
+			[0] =&gt; def
+			[1] =&gt; 0
+			)	
+		)
+	</pre>
+</li>
+<li>
+	Auch benannte (named) Patterns sind möglich, über &lt;&gt;:
+	<pre>
+	$str = 'foobar: 2008';
+	preg_match('/(?P&lt;name&gt;\w+): (?P&lt;zahl&gt;\d+)/', $str, $treffer);
+	
+	print_r($treffer); // ergibt
+	Array (
+		[0] =&gt; foobar: 2008
+		[name] =&gt; foobar
+		[1] =&gt; foobar
+		[zahl] =&gt; 2008
+		[2] =&gt; 2008
+	)
+	</pre>
+</li>
+<li>
+	Um einen bestimmten String zu suchen sind strpos() und strstr() schneller, im Vergleich zu anderen RegEx-Suchen ist preg_match() aber die schnellste
+</li>
+<li>
+	preg_match_all(Pattern, String, MatchesArray, Flags, Offset) liefert alle Treffer, sucht also immer im kompletten String
+</li>
+<li>
+	preg_quote(String, Delimiter) maskiert Metazeichen regulärer Ausdrücke in Strings
+	<pre>
+	$schluesselwoerter = '$40 für einen G3/400';
+	$schluesselwoerter = preg_quote($schluesselwoerter, '/');
+	echo $schluesselwoerter; // liefert \$40 für einen G3\/400
+	</pre>
+</li>
+<li>
+	preg_replace(Pattern, Replacement, Haystack, Limit, Count) ersetzt Strings
+</li>
+<li>
+	liefert Array mit Treffern zurück wenn Suchmuster ein Array ist, ansonsten String
+</li>
+<li>
+	Arrays mit Indizes funktionieren bei Pattern und Replacement auch, aber Nummerierung der Schlüssel wird nicht berücksichtigt &gt; allein die Reihenfolge
+	entscheidet, also womöglich $str[2] vor $str[1]
+</li>
+<li>
+	Bei Fehlern: Rückgabewert NULL
+</li>
+<li>
+	Wenn „Count“ gesetzt dann speichert diese Variable die Zahl der Ersetzungen
+</li>
+<li>
+	preg_split(Pattern, String, Limit, Flags) teilt String mit regulärem Ausdruck auf
+</li>
+</ul>
+
+
+
+<h2>
+	FILES AND FILESYSTEMS
+</h2>
+
+
+<ul>
+<li>
+	Zeilenumbruch abhängig vom Betriebssystem (Unix: \n, Windows: \r\n, Mac: \r), hilfreich: Konstante PHP_EOL
+</li>
+<li>
+	Konfiguration möglich über INI: auto_detect_line_endings &gt; verlangsamt aber Dateifunktionen minimal
+</li>
+<li>
+	grundlegende Infos über is_dir(), is_executable(), is_file(), is_link(), is_readable(), is_writable(), is_uploaded_file() &gt; liefern immer Boolean
+	zurück
+</li>
+<li>
+	PHP cached diese Dateinamen und -Informationen zur Beschleunigung, bei mehreren Operationen hilft daher evtl. Clearstatcache()
+</li>
+<li>
+	allow_url_fopen() erlaubt das Arbeiten mit entfernten URLs, muß aber in der php.ini erlaubt werden – wenn nicht: Warnung beim Aufruf, fopen schlägt fehl
+</li>
+<li>
+	Dateirechte können über die Linux-verwandten Funktionen chown(Filename, User), chgrp(Filename, Group) und chmod(Filename, Mode) geändert werden
+</li>
+<li>
+	Modi sind integer und oktal, also z.B.
+	<pre>
+	chmod('bla.txt', 0755);
+	</pre>
+</li>
+<li>
+	fileperms(File) liefert die Zugriffsrechte einer Datei
+</li>
+<li>
+	fileowner(Filename) gibt den Eigentümer der Datei aus
+</li>
+<li>
+	für Kennwerte der Festplatte gibt es zwei Funktionen:
+</li>
+<ul>
+<li>
+	disk_total_space(Directory) gesamter Speicher (kein Alias!)
+</li>
+<li>
+	disk_free_space(Directory) freier Speicher (Alias: diskfreespace)
+</li>
+</ul>
+<li>
+	Beim Lesen von Daten aus Nicht-Dateien (Streams) sollten Daten in Chunks geholt werden feof(Handle) gibt aus, ob der Pointer das Ende der Datei
+	erreicht hat:
+	<pre>
+	$handle = fopen('<a href="http://www.xyz.com/file.txt">http://www.xyz.com/file.txt</a>', 'rb');
+	$contents = '';
+
+	while(!feof($handle)) {
+		$contents .= fread($handle, 8192);
+	}
+	fclose($handle);
+	</pre>
+</li>
+<li>
+	fopen(Filename, Mode, use_include_path, Context) erstellt Referenz/Ressource, Modi:
+</li>
+<ul>
+<li>
+	'r+' erlaubt Lesen &amp; Schreiben
+</li>
+<li>
+	'w' öffnet zum Schreiben, setzt Datei auf 0 und Zeiger an Anfang, erzeugt Datei wenn sie noch nicht existiert
+</li>
+<li>
+	'w+' wie 'w', öffnet aber zum Lesen &amp; Schreiben
+</li>
+<li>
+	'a' für Schreiben, Dateizeiger ans Ende
+</li>
+<li>
+	'a+' für Lesen &amp; Schreiben, Dateizeiger ans Ende
+</li>
+<li>
+	'x' erzeugt und öffnet neue Datei zum Schreiben, Fehler wenn Datei existiert
+</li>
+<li>
+	'x+' erzeugt und öffnet neue Datei zum Lesen &amp; Schreiben
+</li>
+<li>
+	'c' öffnet zum Schreiben, erzeugt Datei, wenn sie nicht existiert, Zeiger auf 0, Datei wird im Unterschied zu 'x' nicht sofort auf 0 gesetzt
+</li>
+<li>
+	'c+' wie 'c', aber Lesen &amp; Schreiben
+</li>
+<li>
+	fopen('rb') öffnet File im Binärmodus – wird empfohlen, wenn Skripte plattformübergreifend funktionieren sollen (sonst Probleme mit Zeilenumbrüchen und
+	Binärdaten, speziell unter Windows)
+</li>
+</ul>
+<li>
+	fread(Handle, Length) liest Datei ein, Dateigröße über filesize(Filename) ermittelbar, beim Escaping von Sonderzeichen besser als fpassthru()
+</li>
+<li>
+	fstat(Handle) speichert Informationen über eine Datei in einem Array (size, mtime, atime, ctime, uid, blocks, …)
+</li>
+<li>
+	stat() ist identisch, geht aber direkt auf Dateinamen
+</li>
+<li>
+	finfo_file(Ressource, Filename, Options, Context):String liefert Informationen wie z.B. MIME-Type zurück
+</li>
+<li>
+	file(Filename, Flags, Context) liest komplette Datei in ein Array, jeder Eintrag entspricht einer Zeile, Beispiel für die Ausgabe der dritten Zeile:
+	<pre>
+	$content = file('Text.txt');
+	echo $content[2];
+	</pre>
+</li>
+<li>
+	file_get_contents(Filename, use_include_path, Context, Offset, MaxLength) liest Datei in einen einzigen String &gt; generell schneller als file()
+</li>
+<li>
+	file_put_contents(Filename, Data, Flags, Context) schreibt einen String in eine Datei, quasi identisch mit dem Aufruf von fopen(), fwrite() und fclose()
+</li>
+<li>
+	file_put_contents() kann ein Array übergeben werden, ruft dann autom. implode() auf
+</li>
+<li>
+	fgets(Handle, Length) liest eine Zeile der aktuellen Position des Dateizeigers, funktioniert nicht mit Streams
+</li>
+<li>
+	fgetc(Handle) liest aktuelles Zeichen (Character) des Handles
+</li>
+<li>
+	fgetcsv(Handle, Length, Delimiter, Enclosure, Escape) liest Zeile einer CSV-Datei ein und speichert die Werte in ein Array, verwendet standardmäßig das ,
+	als Trennzeichen
+</li>
+<li>
+	fputcsv(Handle, FieldsArray, Delimiter, Enclosure) schreibt Array in CSV-Datei
+</li>
+<li>
+	fflush(Handle) schreibt Ausgabepuffer in Datei
+</li>
+<li>
+	fputs(Handle, String, Length) ist Alias von fwrite()
+</li>
+<li>
+	fpassthru(Handle) gibt alle verbleibenden Daten des Handles (fopen) direkt aus
+</li>
+<li>
+	readfile(Filename, use_include_path) liest eine Datei komplett ein und gibt sie direkt aus, Beispiel für einen erzwungenen Download:
+	<pre>
+	header('Cache-Control: public');
+	header('Content-Type: application/pdf');
+	header('Content-Disposition: attachment, filename=$file');
+	readfile($_SERVER['DOCUMENT_ROOT'] . '/subdir/' . $file);
+	</pre>
+</li>
+<li>
+	fwrite() auf schreibgeschützte Datei ergibt false
+</li>
+<li>
+	ftruncate(Handle, Size) kürzt Datei auf Länge
+</li>
+<li>
+	fscanf(Handle, Format, ) parst den Inhalt einer Datei zeilenweise nach einem bestimmten Muster, Syntax wie bei sprintf()
+	<pre>
+	$handle = fopen("users.txt", "r");
+	while ($userinfo = fscanf($handle, "%s\t%s\t%s\n")) {
+		list ($name, $profession, $countrycode) = $userinfo;
+		//... do something with the values
+	}
+	</pre>
+</li>
+<li>
+	Aktuelle Position des Pointers über ftell(Handle)
+</li>
+<li>
+	aktuelles Verzeichnis über getcwd()
+</li>
+<li>
+	glob(Pattern, Flags):Array liest den Inhalt eines Ordners anhand eines Suchmusters aus, hier ein Beispiel, das wie opendir() funktioniert:
+	<pre>
+	foreach (glob("*.txt") as $filename) {
+		echo "$filename Größe: " . filesize($filename) . "\n";
+	}
+	</pre>
+</li>
+<li>
+	Lesefehler bei glob() werden ignoriert, es sei denn, Flag GLOB_ERR ist gesetzt
+</li>
+<li>
+	opendir(Path, Context) öffnet Verzeichnis-Handle, readdir(Handle) liest Dateien/Vz.:
+	<pre>
+	if (is_dir('/etc/bla')) {
+		if ($dh = opendir($dir)) {
+			while (($file = readdir($dh)) !== false) {
+				echo "Name: $file : Type: " . filetype($dir . $file);
+			}
+			closedir($dh);
+		}
+	}
+	</pre>
+</li>
+<li>
+	flock(Handle, Operation, Wouldblock) sperrt Dateien, setzt aber voraus, dass alle Beteiligten flock verwenden, Operation:
+</li>
+<ul>
+<li>
+	LOCK_SH: Erlaube anderen, die Datei zu lesen, aber nicht zu schreiben
+</li>
+<li>
+	LOCK_EX: Exklusive Leseund Schreibrechte
+</li>
+<li>
+	LOCK_UN: Release lock
+</li>
+</ul>
+<li>
+	fnmatch(Pattern, String, Flags):Boolean überprüft Dateinamen anhand RegEx
+</li>
+<li>
+	Streams gruppieren &amp; ermöglichen (Datei-) Operationen mit ähnlichen Funktionen/Aktionen, aufgeteilt in Wrapper, Pipelines, Context und Metadaten
+</li>
+<li>
+	Streams sind am ehesten „unvollständige“ Dateien, die linear gelesen und geschrieben werden können
+</li>
+<li>
+	fseek(Handle, Offset) springt an bestimmte Stelle im Stream, nicht auf Dateizeiger von HTTP und FTP über fopen() anwenden, kein Fehler beim Überschreiten
+	der Dateilänge
+</li>
+<li>
+	Streams werden über Schema://Ziel referenziert
+</li>
+<li>
+	Liste aller erlaubten Stream Wrapper, auch über stream_get_wrappers():
+</li>
+<ul>
+<li>
+	file:// — Accessing local filesystem
+</li>
+<li>
+	http:// — Accessing HTTP(s) URLs
+</li>
+<li>
+	ftp:// — Accessing FTP(s) URLs
+</li>
+<li>
+	php:// — Accessing I/O streams php://stdin, php://stdout, php://stderr
+</li>
+<li>
+	zlib:// — Compression Streams
+</li>
+<li>
+	compress.zlib:// dito
+</li>
+<li>
+	data:// — Data (RFC 2397)
+</li>
+<li>
+	glob:// — Find pathnames matching pattern
+</li>
+<li>
+	phar:// — PHP Archive
+</li>
+<li>
+	ssh2:// — Secure Shell 2
+</li>
+<li>
+	rar:// — RAR
+</li>
+<li>
+	ogg:// — Audio streams
+</li>
+<li>
+	expect:// — Process Interaction Streams
+</li>
+</ul>
+<li>
+	stream_wrapper_register erlaubt Erzeugen neuer Stream Handler über eigene Klasse:
+	<pre>
+	stream_wrapper_register("var", "VariableStream");
+	$myvar = "";
+	$fp = fopen("var://myvar", "r+");
+	</pre>
+</li>
+<li>
+	Stream Context enthält Informationen über die transportierten Daten und kann Transport &amp; Datei-Wrapper konfigurieren
+</li>
+<li>
+	eigene Stream Contexts über stream_context_create erzeugen, Beispiel es wird beim Request ein eigenes Cookie gesetzt:
+	<pre>
+	$opts = array(
+		'http'=&gt;array(
+			'method'=&gt;"GET",
+			'header'=&gt;"Accept-language: en\r\n" .
+			"Cookie: foo=bar\r\n"
+		)
+	);
+
+	$context = stream_context_create($opts);
+	
+	/* Sends an http request to <a href="http://www.example.com/">www.example.com</a> with additional headers */
+	$fp = fopen('http://www.example.com', 'r', false, $context);
+	fpassthru($fp);
+	fclose($fp);
+	</pre>
+</li>
+<li>
+	Stream-Filter können Streams zugewiesen werden und führen über eine Funktion Operationen mit den eingehenden/ausgehenden Daten aus
+</li>
+<li>
+	Liste aller Stream-Filter über stream_get_filters(), Beispiele:
+</li>
+<ul>
+<li>
+	string.rot13
+</li>
+<li>
+	string.strip_tags
+</li>
+<li>
+	string.toupper / string.tolower
+</li>
+<li>
+	convert.base64encode / convert.base64decode
+</li>
+<li>
+	zlib.deflate (komprimiert) / zlib.inflate (dekomprimiert)
+</li>
+<li>
+	bzip.compress / bzip.decompress
+</li>
+<li>
+	mcrypt.* / mdecrypt.*
+</li>
+</ul>
+<li>
+	eigene Stream-Filter über Klasse php_user_filter
+	
+	<pre>
+	class strtoupper_filter extends php_user_filter {
+		function filter($in, $out, &amp;$consumed, $closing) {
+			while ($bucket = stream_bucket_make_writeable($in)) {
+				$bucket-&gt;data = strtoupper($bucket-&gt;data);
+				$consumed += $bucket-&gt;datalen;
+				stream_bucket_append($out, $bucket);
+			}
+			return PSFS_PASS_ON;
+		}
+	}
+	
+	stream_filter_register("strtoupper", "strtoupper_filter");
+	</pre>
+</li>
+<li>
+	Timeouts für Streams über stream_set_timeout() einstellbar
+</li>
+<li>
+	stream_get_metadata() liefert Info, wieviele Daten übertragen wurden
+</li>
+<li>
+	fsockopen(Host, Port, ErrorNo, ErrorString, Timeout) wird genutzt, um Verbindung zu Ressource über Socket zu erstellen – nützlich wenn kein Datei-Wrapper
+	vorhanden ist
+</li>
+<li>
+	Sockets werden standardmäßig blockiert – über Konfiguration anpaßbar
+</li>
+<li>
+	Als Socket-Transport werden die Protokolle tcp, udp, ssl, tls, unix und udg unterstützt
+	<pre>
+	// server.php
+	$socket = stream_socket_server("tcp://0.0.0.0:1037");
+	while ($conn = stream_socket_accept($socket)) {
+		fwrite($conn, "Hello World\n");
+		fclose($conn);
+	}
+	fclose($socket);
+	
+	// client.php
+	$socket = stream_socket_client(’tcp://0.0.0.0:1037’);
+	while (!feof($socket)) {
+		echo fread($socket, 100);
+	}
+	fclose($socket);
+	
+	// run the server on the OS CLI
+	./server.php &amp;
+	
+	// client:
+	./client.php // output Hello world
+	</pre>
+</li>
+<li>Sockets werden standardmäßig blockiert – über Konfiguration anpaßbar, Beispiel – Morse-Klasse:
+	<pre>
+	class StreamMorse {
+		public $varname;
+		public $fp;
+		public $morse;
+	
+		private function stream_open ($path, $mode, $options, &amp;$opened_path{
+			// store the filename just in case
+			$this-&gt;varname = substr($path, 8);
+			$this-&gt;fp = fopen($this-&gt;varname, $mode);
+			
+			// our conversion array
+			$this-&gt;morse = array("a" =&gt; "Dit dah ", "b" =&gt; "Dah dit dit dit ", "c" =&gt; "Dah dit dah dit ", "d" =&gt; "Dah dit dit ", "e" =&gt; "Dit ", "f"=&gt; "Dit dit dah dit ", "g" =&gt; "Dah dah dit ", "h" =&gt; "Dit dit dit dit ", "i" =&gt; "Dit dit ", "j" =&gt; "Dit dah dah dah ", "k" =&gt; "Dah ditdah ", "l" =&gt; "Dit dah dit dit ", "m" =&gt; "Dah dah ", "n" =&gt; "Dah dit ", "o" =&gt; "Dah dah dah ", "p" =&gt; "Dit dah dah dit ", "q" =&gt; "Dah dahdit dah ", "r" =&gt; "Dit dah dit ", "s" =&gt; "Dit dit dit ", "t" =&gt; "Dah ", "u" =&gt; "Dit dit dah ", "v" =&gt; "Dit dit dit dah ", "w" =&gt; "Dit dahdah ", "x" =&gt; "Dah dit dit dah ", "y" =&gt; "Dah dit dah dah ", "z" =&gt; "Dah dah dit dit ", "0" =&gt; "Dah dah dah dah dah ", "1" =&gt; "Dit dah dahdah dah ", "2" =&gt; "Dit dit dah dah dah ", "3" =&gt; "Dit dit dit dah dah ", "4" =&gt; "Dit dit dit dit dah ", "5" =&gt; "Dit dit dit dit dit ", "6"=&gt; "Dah dit dit dit dit ", "7" =&gt; "Dah dah dit dit dit ", "8" =&gt; "Dah dah dah dit dit ", "9" =&gt; "Dah dah dah dah dit ", "." =&gt; "Dit dah ditdah dit dah ", "," =&gt; "Dah dah dit dit dah dah ", "?" =&gt; "Dit dit dah dah dit dit ", "@" =&gt; "Dah dit dah dit dah dit ", "\n" =&gt; "\n");
+			return true;
+		}
+		
+		private function stream_read($count) {
+			// read in the requested amount of text, and convert to lowercase because we only have lowercase Morse
+			$in = strtolower(fread($this-&gt;fp, $count));
+			$inlen = strlen($in);
+			$out = "";
+			
+			for ($i = 0; $i &lt; $inlen; ++$i) {
+				// skip letters we do not have a conversion for
+				if (isset($this-&gt;morse[ $in{$i} ])) {
+					$out .= $this-&gt;morse[ $in{$i} ];
+				}
+			}
+			return $out;
+		}
+		
+		private function stream_eof() {
+			return feof($this-&gt;fp);
+		}
+		
+		private function stream_close() {
+			fclose($this-&gt;fp);
+			return true;
+		}
+	}
+
+	stream_wrapper_register("morse", "StreamMorse");
+	$fp = fopen("morse://test.txt","r");
+	print fread($fp, 1024);
+	fclose($fp);
+	</pre>
+</li>
+</ul>
+
+
+
+<h2>
+	DATENBANKEN
+</h2>
+
+
+<ul>
+<li>
+	Vier wesentliche Kategorien für SQL Befehle
+</li>
+<ul>
+<li>
+	Data Query Language (DQL) &gt; SELECT-Befehle
+</li>
+<li>
+	Data Definition Language (DDL) &gt; CREATE, ALTER und DROP
+</li>
+<li>
+	Data Manipulation Language (DML) &gt; INSERT, UPDATE und DELETE
+</li>
+<li>
+	Data Control Language (DCL) &gt; GRANT
+</li>
+</ul>
+<li>
+	MySQLi-Funktionen seit PHP5 und MySQL 4.1
+</li>
+<li>
+	PHP Extension existiert für alle namhaften DB-Systeme
+</li>
+<li>
+	Datentypen in MySQL: TINYINT, SMALLINT, MEDIUMINT, INT, BIGINT, FLOAT, DOUBLE, DECIMAL, CHAR, VARCHAR, BINARY, VARBINARY, TINYTEXT, MEDIUMTEXT, TEXT,
+	LONGTEXT, BLOB, MEDIUMBLOB, LONGBLOB, ENUM, SET
+</li>
+<li>
+	In MySQL müssen Kommentare nicht abgeschlossen werden (anders als andere DB-Systeme, evtl. Sicherheitsrisiko)
+</li>
+<li>
+	Primary Key darf nie NULL sein, Foreign Key ist Fremdschlüssel einer anderen Tabelle für relationale DBs
+</li>
+<li>
+	Tabellen können 1-to-1, 1-to-many oder Many-to-many-Beziehungen haben
+</li>
+<li>
+	Aggregierung führt in der DB Berechnungen durch und gibt Wert als Ergebnis zurück
+</li>
+<li>
+	NULL ist nicht 0, false oder '' sondern „kein Wert“, Zeile mit ID NULL würde ignoriert
+</li>
+<li>
+	Index ist praktisch immer nützlich, auch bei IDs (WHERE)
+</li>
+<li>
+	Sortierung über mehrere Spalten (ORDER BY id, name) &gt; gleiche ID sortiert nach Name
+</li>
+<li>
+	Stored Procedures speichern Datenbankabfragen/-operationen in der Datenbank selbst, quasi eine DB-Funktion, die von PHP aufgerufen werden kann
+</li>
+<li>
+	Größe v. Output-Parametern müssen in Stored Procedures beim Binding bekannt sein
+</li>
+<li>
+	Transaktionen sammeln mehrere SQL-Statements um sie zusammen auszuführen
+</li>
+<li>
+	Startbefehle sind START TRANSACTION, BEGIN und BEGIN WORK;
+</li>
+<li>
+	Transaktionen laufen auf Treiber-Ebene, beginTransaction() liefert also womöglich auch 'true', wenn der Treiber gar keine Transaktionen unterstützt
+	(MyISAM)
+</li>
+<li>
+	Transaktionen werden bei fehlendem commit automatisch zurückgerollt
+</li>
+<li>
+	Automatisches Ausführen von Transaktionen über $mysqli-&gt;autocommit(TRUE);
+</li>
+<li>
+	INNER JOIN: Erzeugt Ergebnis mit den gleichen Datenfeldern beider Tabellen (bestimmter Key muß in beiden Tabellen vorhanden sein)
+</li>
+<li>
+	Inner Joins funktionieren nur gut bei gleichen Werten (book.id = chapter.id), Vergleich mit &lt;&gt; liefert keine zuverlässigen Ergebnisse
+</li>
+<li>
+	LEFT JOIN: Verbindet alle Daten zweier Tabellen, in der alle Daten der linken Tabelle sowie die Daten der rechten Tabelle mit erfüllter Bedingung
+	enthalten sind
+</li>
+<li>
+	Weiterhin gibt es noch RIGHT JOIN, CROSS JOIN, NATURAL JOIN, STRAIGHT_JOIN
+</li>
+<li>
+	EXPLAIN vor dem SQL liefert Informationen über das Statement (Optimierung)
+</li>
+<li>
+	BENCHMARK liefert die Dauer der Ausführung eines SQL-Statements
+</li>
+<li>
+	DESCRIBE liefert Informationen zu Tabellenspalten
+</li>
+<li>
+	ExtractValue führt XPath-Operationen auf MySQL-Daten aus
+</li>
+<li>
+	REPLACE ist MySQL-spezifisch und identisch mit INSERT, löscht aber einen Datensatz mit identischem Primary Key bevor es den neuen anlegt
+</li>
+<li>
+	Ein Trigger führt eine Operation aus, sobald an einem DB-Feld etwas geändert wird
+</li>
+<li>
+	MySQL-Views sind virtuelle Tabellen aus einem SELECT-Statement &gt; virtuelle Tabelle, die für eine bestimmte Anwendung erstellt wird, meist schneller
+</li>
+<li>
+	Beispiel für ein CREATE:
+	<pre>
+	CREATE TABLE dvd (id INT NOT NULL PRIMARY KEY, title VARCHAR(300) NOT NULL, category VARCHAR(200) NOT NULL, fsk VARCHAR(2) NOT NULL);
+	</pre>
+</li>
+<li>
+	Beispiel INSERT:
+	<pre>
+	INSERT INTO dvd(id,title,category,fsk) VALUES (DEFAULT, 'Jurassic Park', 'Thriller', 12);
+	</pre>
+</li>
+<li>
+	Beispiel UPDATE:
+	<pre>
+	UPDATE article SET name = 'MyNewName', price = '9.99', number = '123' WHERE id = 16;
+	</pre>
+</li>
+<li>
+	Beispiel DELETE:
+	<pre>
+	DELETE FROM article WHERE id = 313;
+	</pre>
+</li>
+<li>
+	Beispiel LEFT JOIN:
+	<pre>
+	SELECT article.*, category.* FROM article LEFT JOIN category ON category.categoryID=category.id;
+	</pre>
+</li>
+<li>
+	Beispiel für eine VIEW:
+	<pre>
+	CREATE VIEW AS db.myview AS SELECT name, class FROM table;
+	</pre>
+</li>
+<li>
+	PDO seit PHP 5.1 dabei, ist selbst eine Klasse, liefert objektorientiertes Interface zum Zugriff auf nahezu alle DB-Systeme – abstrahiert die DB-Schicht
+	vom Rest
+</li>
+<li>
+	Connection &amp; SELECT über PDO wie folgt:
+	
+	<pre>
+	$con = new PDO('mysql:host=localhost;dbname=thename', $user, $pass);
+	$query = $con-&gt;prepare('SELECT name, isbn FROM book');
+	
+	$query-&gt;execute();
+	$result = $query-&gt;fetchAll();
+	</pre>
+</li>
+<li>
+	$con-&gt;prepare() nicht nötig, wenn keine Variablen zu setzen sind, dann $con-&gt;query() hier Beispiel-Aufruf einer Stored Procedure:
+	
+	<pre>
+	$stmt = $con-&gt;query("CALL sp_return_bla()");
+	</pre>
+</li>
+<li>
+	Connection für nahezu alle Systeme gleich, ausgenommen SQLite (kein User/Password)
+</li>
+<li>
+	Verschiedene Methoden, um Datenobjekte zu holen ($db-&gt;setFetchMode(PDO:...)):
+</li>
+<ul>
+<li>
+	FETCH_ASSOC: jede Reihe ist ein assoziatives Array, Schlüssel sind die Spaltennamen, gibt einen Wert pro Spaltenbezeichner zurück $result['name']
+</li>
+<li>
+	FETCH_OBJ: Ergebnis ist Objekt, Bezeichner sind Spaltennamen $result-&gt;name
+</li>
+<li>
+	FETCH_CLASS: Neue Instanz der übergebenen Klasse wird zurückgeliefert, Ergebnis werden Eigenschaften zugewiesen:
+	
+	<pre>
+	$query = $db-&gt;query('SELECT name, addr from people');
+	$query-&gt;setFetchMode(PDO::FETCH_CLASS, 'myClass');
+	
+	while($object = $query-&gt;fetch() {
+		echo $object-&gt;address;
+	}
+
+	class myClass {
+		public $address;
+		
+		function __construct() {
+			$this-&gt;address = strtoupper($this-&gt;address);
+		}
+	}
+	</pre>
+</li>
+<li>
+	FETCH_LAZY: jede Reihe ist Objekt, Variablen sind die Spaltennamen
+</li>
+<li>
+	FETCH_NAMED: wie FETCH_ASSOC, gibt Werte-Array für jeden Spalte zurück
+</li>
+<li>
+	FETCH_NUM: Rückgabe als Array, Schlüssel numeriert
+</li>
+<li>
+	FETCH_BOTH: Rückgabe als Array, Schlüssel sind Nummern und Spaltennamen
+</li>
+<li>
+	FETCH_BOUND: Gibt true zurück, Werte werden den Variablen zugewiesen, die mit bindParam() bzw. bindColumn() definiert wurden
+</li>
+<li>
+	FETCH_COLUMN: Einzelne Spalte von nächster Zeile wird zurückgeliefert
+</li>
+<li>
+	FETCH_INTO: Wie FETCH_CLASS, aber es wird keine neue Instanz erzeugt
+</li>
+</ul>
+<li>
+	weitere PDOStatement-Methoden für Prepared Statements bzw. nach der Ausführung:
+</li>
+<ul>
+<li>
+	bindColumn(Parameter, Value, Data Type), bindParam(), bindValue()
+</li>
+<li>
+	closeCursor
+</li>
+<li>
+	columnCount
+</li>
+<li>
+	debugDumpParams
+</li>
+<li>
+	errorCode(), errorInfo()
+</li>
+<li>
+	execute(ParameterArray)
+</li>
+<li>
+	fetch, fetchAll, fetchColumn, fetchObject()
+</li>
+<li>
+	getAttribute
+</li>
+<li>
+	getColumnMeta
+</li>
+<li>
+	nextRowset()
+</li>
+<li>
+	rowCount()
+</li>
+<li>
+	setAttribute(Attribute, Value)
+</li>
+</ul>
+<li>
+	Prepared Statements sind kompilierte Queries mit mehreren Befehlen – Vorteile: Query wird nur einmal gesetzt, aber mehrfach mit verschiedenen Variablen
+	ausgeführt (bessere Performance), abgeleitete Parameter müssen nicht escaped werden (sicherer)
+</li>
+<li>
+	Prepared Statements werden von der DB analysiert, compiliert und optimiert (mehrfacher Aufruf sehr schnell):
+	
+	<pre>
+	$sql = 'SELECT * from books WHERE user = :username';
+	$stmt = $db-&gt;prepare($sql);
+	$stmt-&gt;bindParam(':username', $user);
+	$stmt-&gt;execute();
+
+	$results = $stmt-&gt;fetchAll();
+	</pre>
+</li>
+<li>
+	Parameter können bei Prepared Statements sowohl mit '?' (dann Übergabe als Array) und auch benannt (:variable) angeben werden
+</li>
+<li>
+	Treiber maskiert Parameter bei Prepared Statements automatisch
+</li>
+<li>
+	PDO emuliert Prepared Statements, falls die DB es nicht unterstützt
+</li>
+<li>
+	PDO bringt eigene Exceptions (PDOException) mit – folgende Methoden: getCode(), getFile(), getMessage(), getLine(), getTrace(), getTraceAsString()
+</li>
+<li>
+	Wenn PDO Constructor eine Exception verursacht und diese nicht abgefangen wird wird das Skript beendet und ein Backtrace angezeigt – Sicherheitsrisiko!
+</li>
+<li>
+	Fehler bei Connection erzeugt immer eine Exception
+</li>
+<li>
+	PDO-Verbindungen schließen indem man der Variable den Wert null zuweist
+</li>
+<li>
+	Persistente Verbindungen werden nach Skriptende nicht geschlossen, sondern gecached und beim erneuten Login weiter benutzt, Aufruf über mysql_pconnect
+</li>
+<li>
+	verschiedene Fehler-Settings: Silent (kann mit Methoden errorCode() und errorInfo() untersucht werden), Warning (gut für Debugging/Testing) oder
+	Exception (mit Fehlerbeschreibung) in php.ini zu definieren
+</li>
+<li>
+	PDOStatement erlaubt nur Werte, keine Bezeichner, Arrays bzw. NULL
+</li>
+<li>
+	PDO::exec() führt SQL Statement aus und liefert die Zahl der betroffenen Zeilen zurück
+</li>
+<li>
+	es gibt auch einen MySQL native driver (mysqlnd) als Alternative zu libmysql – Vorteile:
+</li>
+<ul>
+<li>
+	evtl. schneller als libmysql, keine neue API (Befehle bleiben gleich)
+</li>
+<li>
+	nutzt Memory-Management von PHP
+</li>
+<li>
+	unterstützt Kompression und SSL erst in neun Versionen 5.3.2 bzw. 5.3.3
+</li>
+<li>
+	neuer Befehl mysqli_fetch_all()
+</li>
+<li>
+	unterstützt persistente Verbindungen für mysqli
+</li>
+<li>
+	jede Zeile wird nur ein Mal im Speicher gehalten (libmysql: zwei)
+</li>
+<li>
+	liefert Statistiken zur Messung der Performance, z.B. mysqli_get_client_stats()
+</li>
+</ul>
+</ul>
+
+
+
+
+<h2>
+	DATENTYPEN UND FORMATE
+</h2>
+
+
+
+
+<h3>
+	XML
+</h3>
+<ul>
+<li>
+	XML muß in der Definition mindestens die Version enthalten, sonst nichts (Attribute standalone, encoding und die DTD sind optional)
+</li>
+<li>
+	PHP-Voraussetzung: libxml-Bibliothek (standardmäßig aktiv), auch für SOAP
+</li>
+<li>
+	XML-Elemente sollten „Daten“ enthalten, Attribute eher Metadaten
+</li>
+<li>
+	XML ist case-sensitive, daher darf das „xml“ nicht großgeschrieben werden
+</li>
+<li>
+	XML erlaubt auch mehrfaches Setzen von &lt;?xml version= … ?&gt; innerhalb einer Datei sowie Platzhalter für Variablen, etwa &lt;?var type=“string“ ?&gt;
+</li>
+<li>
+	SimpleXML unterstützt nur XML 1.0, nicht 1.1 (Warning &amp; wird nicht geparst)
+</li>
+<li>
+	XML erlaubt mehrere Dokumenttypen in einer Datei über Namespaces, Beispiel:
+	<pre>
+	&lt;h:table&gt;&lt;/h:table&gt;
+	&lt;item:table&gt;&lt;/item:table&gt;
+	</pre>
+</li>
+<li>
+	Auslesen aller Namespaces über ein Array: $xml-&gt;getDocNamespaces();
+</li>
+<li>
+	Processing instructions sind möglich, etwa um PHP-Code in XML zu „parken“
+</li>
+<li>
+	DTD ist der Regelsatz für ein XML-Dokument, ähnelt regulären Ausdrücken, Beispiel:
+	<pre>
+	&lt;!ELEMENT html (head, body)&gt;
+	&lt;!ELEMENT hr EMPTY&gt;
+	&lt;!ELEMENT div (#PCDATA | p | ul | ol | dl | table | pre | hr | h1|h2|h3|h4|h5|h6 | blockquote | address | fieldset)*&gt;
+	&lt;!ELEMENT dl (dt|dd)+&gt;
+	</pre>
+</li>
+<li>
+	XSL definiert Layout eines XML-Dokuments, Beispiel:
+	<pre>
+	&lt;xsl:stylesheet 
+		id = id 
+		extension-element-prefixes = tokens 
+		exclude-result-prefixes = tokens 
+		version = number&gt;
+	&lt;/xsl:stylesheet&gt;
+	</pre>
+</li>
+<li>
+	XSL Extension XSLTProcessor wendet XML Transformationen an:
+</li>
+<ul>
+<li>
+	transformiert DOMNode in DOMDocument
+</li>
+<li>
+	transformiert Dokument in XML-Datei
+</li>
+<li>
+	transformiert DOMDocument in XML-String
+</li>
+</ul>
+<li>
+	Beispiel für XSD (XML Scheme Definition):
+	<pre>
+	&lt;xs:simpleType name="monatInt"&gt;
+	&lt;xs:restriction base="xs:integer"&gt;
+	&lt;xs:minInclusive value="1"/&gt;
+	&lt;xs:maxInclusive value="12"/&gt;
+	&lt;/xs:restriction&gt;
+	&lt;/xs:simpleType&gt;
+	</pre>
+</li>
+<li>
+	XSD besser als DTD, weil:
+</li>
+<ul>
+<li>
+	Inhaltliche Zusammenhänge zwischen Elementen werden beschrieben
+</li>
+<li>
+	XSD ist ein XML-Dokument
+</li>
+<li>
+	Reguläre Ausdrücke können für die Validierung genutzt werden
+</li>
+</ul>
+<li>
+	Event-basierter XML-Parser: SAX (löst Ereignis bei XML-Konstrukt aus)
+</li>
+<li>
+	Encodierung des Textes bestimmt sich während des Parsens, Standard ist aber ISO-8859-1, kann während des Parsens nicht geändert werden
+</li>
+<li>
+	Ergebnis-Encodierung bestimmt der XML-Handler, kann jederzeit angepaßt werden, unerkannte Zeichen werden zu '?'
+</li>
+<li>
+	Einige vordefinierte Fehlerkonstanten: XML_ERROR (Syntax, Encoding), XML_OPTION (Leerzeichen, Einrückung)
+</li>
+<li>
+	Quelle für SimpleXML können Strings und DOM-Dokumente sein, auch via URI
+</li>
+<li>
+	SimpleXML wandelt Elemente in Objekteigenschaften, Attribute werden assoz. Arrays
+</li>
+<li>
+	SimpleXMLElement::count() zählt die untergeordneten Elemente (children), SimpleXMLElement::asXML gibt XML-String zurück und schreibt diesen in eine Datei
+	(Achtung – Zieldatei wird immer überschrieben)
+</li>
+<li>
+	Beispiel für SimpleXML-Abfrage: $xml-&gt;body-&gt;p-&gt;a['href'];
+</li>
+<li>
+	SimpleXML hat Schwierigkeiten bei Elementen mit Bindestrich, daher muß dieses Element in geschweifte Klammern gesetzt werden:
+	<pre>
+	$xml-&gt;body-&gt;p-&gt;{my-element};
+	</pre>
+</li>
+<li>
+	XPath navigiert anhand von / ausgehend von der Hauptebene, bei Verwendung von // wird in allen Ebenen gesucht
+	<pre>
+	$results = $library-&gt;xpath('/library/book/title'); // Rückgabe Array
+	</pre>
+</li>
+<li>
+	@ für Attributvergleich, bei mehreren Elementen Navigation wie bei Arrays[Index]
+</li>
+<li>
+	* dient als Platzhalter, child:: sucht Kindelemente, attribute:: nach Attributen
+</li>
+<li>
+	Geschwisterknoten können mit preceding-sibling &amp; following-sibling ermittelt werden
+</li>
+<li>
+	Mögliche Operatoren sind and, or, xor, mod, es kann auch verglichen werden – dieser Aufruf sucht aus mehreren &lt;artikel&gt; den heraus, wo das
+	Kindelement &lt;preis&gt; einen höheren Wert als 50 hat:
+	<pre>
+	//artikel[preis<code>&gt;</code><code>50</code>]/preis
+	</pre>
+</li>
+<li>
+	DOM stellt XPath zur Verfügung, kann auch auf SimpleXML angewendet werden:
+	<pre>
+	simplexml_import_dom($node)-&gt;xpath('/test');
+	</pre>
+</li>
+<li>
+	Beispiele für Queries:
+	<pre>
+	// Zugriff via Kind-Element
+	$xpath-&gt;query('//line')-&gt;item(1)-&gt;nodeValue;
+	
+	// Filter via Attribut
+	$xpath-&gt;query('//line[@no="\2\"]'")-&gt;item(0)-&gt;nodeValue;
+	</pre>
+</li>
+<li>
+	DOM stellt XPath zur Verfügung, kann auch auf SimpleXML angewendet werden:
+</li>
+<li>
+	PHP bietet auch native Unterstützung für XML-RPC, Beispiel:
+	<pre>
+	&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+	&lt;methodCall&gt;
+	&lt;methodName&gt;sample.sum&lt;/methodName&gt;
+	&lt;params&gt;
+	&lt;param&gt;
+	&lt;value&gt;&lt;int&gt;17&lt;/int&gt;&lt;/value&gt;
+	&lt;/param&gt;
+	&lt;param&gt;
+	&lt;value&gt;&lt;int&gt;13&lt;/int&gt;&lt;/value&gt;
+	&lt;/param&gt;
+	&lt;/params&gt;
+	&lt;/methodCall&gt;
+	</pre>
+</li>
+</ul>
+
+
+
+<h3>
+	DOMDOCUMENT
+</h3>
+
+
+
+<ul>
+<li>
+	DOM-Erweiterung erlaubt Manipulation von XML-Dokumenten, DOM/SimpleXML können konvertiert werden simplexml_import_dom() sowie dom_import_simplexml()
+</li>
+<li>
+	DOM nutzt immer UTF-8
+</li>
+<li>
+	Beispiel-Syntax:
+	<pre>
+	$dom-&gt;load('http://my.xml');
+	
+	// create root element
+	$root = $dom-&gt;createElement("toppings");
+	$dom-&gt;appendChild($root);
+	
+	// create child element
+	$item = $dom-&gt;createElement("item");
+	$root-&gt;appendChild($item);
+	
+	// create text node
+	$text = $dom-&gt;createTextNode("pepperoni");
+	$item-&gt;appendChild($text);
+
+	// create attribute node
+	$price = $dom-&gt;createAttribute("price");
+	$item-&gt;appendChild($price);
+
+	// create attribute value node
+	$priceValue = $dom-&gt;createTextNode("4");
+	$price-&gt;appendChild($priceValue);
+
+	// retrieve elements
+	$food = $dom-&gt;getElementsByTagName(food');
+	$food3 = $dom-&gt;getElementsByTagName(food')-&gt;item(2)-&gt;nodeValue;
+	
+	// save XML
+	$dom-&gt;saveXML();
+	</pre>
+</li>
+<li>
+	DOM-Knoten müssen immer über appendChild() angefügt werden, sonst nicht sichtbar
+</li>
+<li>
+	Namespace über createElementNS() bzw. setElementNS()
+</li>
+<li>
+	splitText(Offset) teilt DOMTextNode in zwei auf
+</li>
+<li>
+	bei createElement() wird nichts escaped, bei createTextNode() hingegen schon
+</li>
+<li>
+	CDATA über createCDATASection()
+</li>
+<li>
+	Verschieben von Daten leider nicht so einfach – geht nur über appendChild():
+	<pre>
+	$result-&gt;$item(1)-&gt;parentNode-&gt;appendChild($result-&gt;$item(0));
+	</pre>
+</li>
+<li>
+	Entfernen je nach Inhalt – removeAttribute() für Attribute, removeChild() für Knoten oder deleteData() für CDATA
+</li>
+<li>
+	DOMXPath-Objekt ist mächtiger als xpath via SimpleXML:
+	
+	<pre>
+	$doc-&gt;Load('book.xml');
+	$xpath = new DOMXPath($doc);
+	$query = '//book/chapter/para/entry[2]';
+	$entries = $xpath-&gt;query($query);
+	</pre>
+</li>
+<li>
+	Es gibt auch die Funktion loadHTML(), dann müssen Daten nicht wohlgeformt sein
+</li>
+<li>
+	Validierungsfunktion validate() funktioniert nur, wenn min. 1 Node + DTD zugewiesen
+</li>
+<li>
+	Weitere DOM-Funktionen:
+</li>
+<ul>
+<li>
+	formatOutput – Rückgabe platzsparend &amp; formatiert
+</li>
+<li>
+	preserveWhiteSpace erhält Leerzeichen
+</li>
+<li>
+	encoding bestimmt den Zeichensatz
+</li>
+<li>
+	version liest die XML-Version
+</li>
+</ul>
+<li>
+	vordefinierte Konstanten sind z.B. XML_ELEMENT_NODE, XML_TEXT_NODE zur Festlegung eines Knotentyps
+</li>
+</ul>
+
+
+
+<h3>
+	SOAP
+</h3>
+
+
+
+
+<ul>
+<li>
+	eine korrekte SOAP-Nachricht enthält Envelope, Header und Body
+</li>
+<li>
+	es können SOAP-Server (Klasse SoapServer) bzw. Clients (SoapClient) erstellt werden
+</li>
+<li>
+	Funktioniert auch ohne WSDL, dann einfach NULL an den SoapClient-Konstruktor übergeben – Eintrittspunkt-URL muß als Teil des 2. Parameters übergeben
+	werden:
+	<pre>
+	$options = array('location'=&gt;'<a href="http://xxx/server.php">http://xxx/server.php</a>', 'uri'=&gt;'<a href="http://xxx/">http://xxx</a>');
+	$client = new SoapClient(NULL, $options);
+	$client-&gt;getMessage(); // funktioniert, wenn server.php die Methode getMessage() anbietet
+	</pre>
+</li>
+<li>
+	zum Debugging kann der SoapClient alles tracen, dann sieht man auch Header &amp; Body
+</li>
+<li>
+	Web-Services arbeiten generell ohne Authentifizierung und über das Internet, daher müssen Sicherheitsmechanismen implementiert werden
+</li>
+<li>
+	SoapClient-Methoden sind __doRequest, __getFunctions, __getLastRequest, __getLastResponse, __getTypes, __setCookie, __setSoapHeaders, __call, __soapCall
+</li>
+<li>
+	weiterhin stehen Klassen SoapFault, SoapHeader, SoapParam &amp; SoapVar zur Verfügung
+</li>
+<li>
+	Funktionen zur Fehlerkontrolle: is_soap_fault, use_soap_error_handler &gt; vor allem nützlich, wenn keine Exceptions (SoapFault)verwendet werden
+</li>
+<li>
+	SOAP Caching richtet sich nach Einstellungen der php.ini, weiterhin viele vordefinierte Konstanten, die zur Laufzeit gesetzt werden können
+</li>
+<li>
+	UDDI (Universal Description, Discovery and Integration) ist ein Standard-Verzeichnisdienst für SOA-Anwendungen
+</li>
+<li>
+	Beispiel SOAP Request/Response:
+	<pre>
+	&lt;?xml version="1.0"?&gt;
+	&lt;soap:Envelope
+	xmlns:soap="http://www.w3.org/2001/12/soap-envelope"
+	soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding"&gt;
+	&lt;soap:Body xmlns:m="http://www.example.org/stock"&gt;
+	&lt;m:GetStockPrice&gt;
+	&lt;m:StockName&gt;IBM&lt;/m:StockName&gt;
+	&lt;/m:GetStockPrice&gt;
+	&lt;/soap:Body&gt;
+	&lt;/soap:Envelope&gt;
+	&lt;?xml version="1.0"?&gt;
+	&lt;soap:Envelope
+	xmlns:soap="http://www.w3.org/2001/12/soap-envelope"
+	soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding"&gt;
+	&lt;soap:Body xmlns:m="http://www.example.org/stock"&gt;
+	&lt;m:GetStockPriceResponse&gt;
+	&lt;m:Price&gt;34.5&lt;/m:Price&gt;
+	&lt;/m:GetStockPriceResponse&gt;
+	&lt;/soap:Body&gt;
+	&lt;/soap:Envelope&gt;
+	</pre>
+</li>
+</ul>
+
+
+
+
+<h3>
+	REST
+	<br/>
+	<br/>
+</h3>
+
+
+
+
+<ul>
+<li>
+	REST ist ein Design-Prinzip, keine PHP-Erweiterung mit vier Designprinzipien:
+</li>
+<ul>
+<li>
+	nur HTTP
+</li>
+<li>
+	zustandslos
+</li>
+<li>
+	veröffentlicht URIs
+</li>
+<li>
+	überträgt XML und/oder JSON, ist natürlich XML-konform
+</li>
+</ul>
+<li>
+	nutzt GET (Liste oder Ressource), POST (Create), PUT (Update/Replace), DELETE
+</li>
+<li>
+	im Gegensatz zu SOAP sind die Dienste nicht “erkennbar”, daher Doku der API nötig
+</li>
+<li>
+	unterstützte Datentypen sind Strings (ASCII), Integers, Boolean
+</li>
+<li>
+	REST wird oft über Curl umgesetzt
+</li>
+<li>
+	Context Switching untersucht Header bzw. URI des Requests und variiert die Response entsprechend (nützlich z.B. für das Layout)
+</li>
+<li>
+	REST Request-Header:
+</li>
+<ul>
+<li>
+	Content-Type (was wird abgerufen)
+</li>
+<li>
+	Accept (was wird als Antwort erwartet)
+</li>
+</ul>
+<li>
+	REST Response-Header
+</li>
+<ul>
+<li>
+	Content-Type (was wird zurückgegeben)
+</li>
+<li>
+	Accept (was wann cachen)
+</li>
+</ul>
+<li>
+	verschiedene Statuscodes:
+</li>
+<ul>
+<li>
+	201 „created“
+</li>
+<li>
+	204 steht für „No content“ &gt; nützlich beim Löschen
+</li>
+<li>
+	400 „bad request / failed validation“
+</li>
+<li>
+	401 „unauthorized“
+</li>
+<li>
+	500 „Application Error“
+</li>
+</ul>
+</ul>
+
+
+
+
+
+<h3>
+	JSON
+</h3>
+
+
+
+<ul>
+<li>
+	vordefinierte JSON-Konstanten: JSON_ERROR_NONE, JSON_ERROR_SYNTAX, JSON_ERROR_UTF8, JSON_FORCE_OBJECT &gt; überträgt immer ein Objekt, selbst wenn ein
+	leeres Array übergeben wurde
+</li>
+<li>
+	json_last_error liefert den letzten JSON-Fehler zurück
+</li>
+<li>
+	json_decode kann auch assoziatives Array ausgeben, ansonsten Objekt
+</li>
+<li>
+	JSON verlangt zwingend doppelte Anführungszeichen für Bezeichner und Werte, Kommata nur zwischen Wertepaaren (also {}, nicht {,})
+</li>
+<li>
+	json_encode arbeitet nur mit UTF-8
+</li>
+</ul>
+
+
+
+<h3>
+	DATETIME
+</h3>
+
+
+
+<ul>
+<li>
+	Datumsfunktionen abhängig von Settings in php.ini
+</li>
+<li>
+	Datumsund Zeitformate werden als 64-bit-Wert gespeichert
+</li>
+<li>
+	Locale-Setting bestimmt Besonderheiten wie Schaltjahre, Sommerzeit
+</li>
+<li>
+	strtotime() wandelt beliebigen englischen String in Timestamp um, gibt vor 1.1.1970 (Windows) bzw. 13.01.1901 (Unix) FALSE zurück (vor PHP 5.1: -1)
+</li>
+<li>
+	strftime(format, timestamp) formatiert Zeitangabe ähnlich wie sprintf() bzw. date() Beispiel:
+	<pre>
+	strftime("%V,%G,%Y", strtotime("12/28/2002"); // Output: 52 (Kalenderwoche),2002 (Jahr),2002 (ebenfalls Jahr)
+	</pre>
+</li>
+<li>
+	Weitere Parameter (Auszug):
+</li>
+<ul>
+<li>
+	%a für Wochentag kurz (Fri), %A lang (Friday)
+</li>
+<li>
+	%b für Monatsname kurz (Jan), %B lang (January)
+</li>
+<li>
+	%j Tag des Jahres (001 bis 366)
+</li>
+<li>
+	%u und %w Tag der Woche (0-7)
+</li>
+<li>
+	%p für „AM“ oder „PM“, %P dasselbe kleingeschrieben
+</li>
+<li>
+	%T für %H%M%S, also z.B. 23:59:16, %R nur %H%M
+</li>
+<li>
+	%Z für Zeitzone
+</li>
+</ul>
+<li>
+	mktime() gibt Unix-Zeitstempel für übergebenes Datum zurück, gmmktime() tut dasselbe für die GMT
+</li>
+<li>
+	time() gibt aktuellen Timestamp bezogen auf lokale Zeit zurück
+</li>
+<li>
+	microtime() gibt aktuellen Timestamp ergänzt mit Mikrosekunden zurück
+</li>
+<li>
+	checkdate(month,day,year) überprüft Datum auf Gültigkeit
+</li>
+<li>
+	Beschränkung ist auf 64bit-Systemen praktisch aufgehoben
+</li>
+<li>
+	Generell sollte Datumsoperation der Datenbank überlassen werden (größerer Zeitbereich, Validierung) sofern möglich
+</li>
+<li>
+	DateTime-Klasse liefert auch vordefinierte Konstanten (Zeitformat für Cookie, RSS)
+</li>
+<li>
+	Datumsangabe sehr flexibel, Beispiel:
+	<pre>
+	date_add($date, date_interval_create_from_date_string('6 days'));
+	</pre>
+</li>
+<li>
+	Vorsicht bei Monaten: seltsame Ergebnisse, wenn 'P1M' mehrfach zugewiesen wird
+</li>
+<li>
+	neu seit PHP 5.2: DateTime::modify();
+</li>
+<li>
+	Zeitangaben, die es nicht gibt (z.B. 34. März) werden hinzuaddiert
+	<pre>
+	$date = setDate(2003, 14, 3); // ergibt 2004-02-03
+	</pre>
+</li>
+<li>
+	DateTime-Klasse liefert über DateTime::diff auch Unterschiede zwischen zwei Zeiten zurück
+</li>
+</ul>
+
+
+</body>
+</html>
